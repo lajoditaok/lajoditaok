@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jodita OK — La Jodita Vol. 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root {
     --blue: #00BFFF;
-    --blue-dark: #0080CC;
     --blue-glow: rgba(0,191,255,0.25);
     --yellow: #FFD700;
     --yellow-glow: rgba(255,215,0,0.25);
@@ -18,273 +18,223 @@
     --gray: rgba(255,255,255,0.45);
     --border: rgba(255,255,255,0.07);
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--dark);color:var(--white);font-family:'Montserrat',sans-serif;overflow-x:hidden;}
 
-  /* ── SPLASH ── */
-  #splash {
-    position: fixed; inset: 0; background: #000; z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: 16px;
-    animation: splashFade 0.6s ease 2.6s forwards;
-  }
-  @keyframes splashFade { to { opacity:0; pointer-events:none; } }
-  #splash.hidden { display: none; }
-  .splash-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 15vw, 7rem);
-    letter-spacing: 10px;
-    color: var(--white);
-    animation: splashLogoIn 0.8s cubic-bezier(.16,1,.3,1) 0.3s both;
-  }
-  .splash-logo span { color: var(--blue); }
-  .splash-vol {
-    font-size: 0.7rem; letter-spacing: 8px; color: rgba(255,255,255,0.25);
-    text-transform: uppercase;
-    animation: splashLogoIn 0.6s ease 0.8s both;
-  }
-  .splash-ring {
-    position: absolute;
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,191,255,0.15);
-    animation: ringExpand 2s ease-out 0.4s both;
-  }
-  .splash-ring2 {
-    position: absolute;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,191,255,0.08);
-    animation: ringExpand 2s ease-out 0.7s both;
-  }
-  @keyframes splashLogoIn { from { opacity:0; transform: scale(0.85) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
-  @keyframes ringExpand { from { transform: scale(0.5); opacity:0; } to { transform: scale(1); opacity:1; } }
+  /* SPLASH */
+  #splash{position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;transition:opacity .6s ease;}
+  #splash.hide{opacity:0;pointer-events:none;}
+  .splash-ring{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(0,191,255,0.15);animation:ringExp 2s ease-out .4s both;}
+  .splash-ring2{position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(0,191,255,0.08);animation:ringExp 2s ease-out .7s both;}
+  .splash-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,15vw,7rem);letter-spacing:10px;color:#fff;animation:splashIn .8s cubic-bezier(.16,1,.3,1) .3s both;}
+  .splash-logo span{color:var(--blue);}
+  .splash-vol{font-size:.68rem;letter-spacing:8px;color:rgba(255,255,255,.2);text-transform:uppercase;animation:splashIn .6s ease .8s both;}
+  @keyframes splashIn{from{opacity:0;transform:scale(.85) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+  @keyframes ringExp{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
 
-  /* ── PARTICLES ── */
-  #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  .grid-overlay {
-    position: fixed; inset: 0;
-    background-image: linear-gradient(rgba(0,191,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,191,255,0.03) 1px, transparent 1px);
-    background-size: 50px 50px; pointer-events: none; z-index: 0;
-  }
-  section, header, footer { position: relative; z-index: 1; }
+  #particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .grid-overlay{position:fixed;inset:0;background-image:linear-gradient(rgba(0,191,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,191,255,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0;}
+  section,header,footer{position:relative;z-index:1;}
 
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; text-align: center; padding: 40px 20px 60px; overflow: hidden;
-  }
-  .hero-glow {
-    position: absolute; width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(0,191,255,0.1) 0%, transparent 70%);
-    border-radius: 50%; animation: pulseGlow 4s ease-in-out infinite; pointer-events: none;
-  }
-  @keyframes pulseGlow { 0%,100%{transform:scale(1);opacity:.5;} 50%{transform:scale(1.2);opacity:1;} }
-
-  .badge-ed { background: transparent; border: 1px solid rgba(0,191,255,0.4); color: var(--blue); font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 4px; padding: 5px 16px; border-radius: 2px; margin-bottom: 22px; display: inline-block; animation: fadeUp 0.7s ease both; }
-  .logo-wrap { margin-bottom: 16px; animation: fadeUp 0.7s 0.1s ease both; cursor: pointer; user-select: none; }
-  .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem,8vw,3.5rem); color: var(--white); letter-spacing: 8px; }
-  .logo-text span { color: var(--blue); }
-  .hero-subtitle { font-size: 0.8rem; letter-spacing: 5px; color: var(--gray); text-transform: uppercase; margin-bottom: 8px; animation: fadeUp 0.7s 0.2s ease both; }
-  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem,16vw,8rem); color: var(--white); line-height: 0.9; letter-spacing: 4px; animation: fadeUp 0.7s 0.3s ease both; }
-  .hero-title span { color: var(--yellow); }
-  .hero-date { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.1rem,4vw,1.8rem); letter-spacing: 6px; color: var(--blue); margin-top: 12px; animation: fadeUp 0.7s 0.4s ease both; text-shadow: 0 0 20px var(--blue-glow); }
-  .hero-edition { font-size: 0.68rem; letter-spacing: 4px; color: rgba(255,255,255,0.25); margin-top: 6px; text-transform: uppercase; animation: fadeUp 0.7s 0.45s ease both; }
-  .hero-btns { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.8s 0.55s ease both; }
-  .cta-btn { display: inline-block; padding: 16px 44px; background: var(--blue); color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; border: none; border-radius: 3px; cursor: pointer; box-shadow: 0 0 24px var(--blue-glow); transition: transform 0.2s, box-shadow 0.2s; font-weight: 900; text-decoration: none; }
-  .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 0 40px var(--blue-glow); }
-  .share-btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 30px; background: transparent; color: var(--white); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 3px; border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; transition: all 0.2s; }
-  .share-btn:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
-
-  .stars { position: absolute; font-size: 1rem; animation: starFloat 4s ease-in-out infinite; pointer-events: none; opacity: 0.3; }
+  /* HERO */
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px 60px;overflow:hidden;}
+  .hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(0,191,255,.1) 0%,transparent 70%);border-radius:50%;animation:pulseG 4s ease-in-out infinite;pointer-events:none;}
+  @keyframes pulseG{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.2);opacity:1;}}
+  .badge-ed{background:transparent;border:1px solid rgba(0,191,255,.4);color:var(--blue);font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:4px;padding:5px 16px;border-radius:2px;margin-bottom:22px;display:inline-block;animation:fadeUp .7s ease both;}
+  .logo-wrap{margin-bottom:16px;animation:fadeUp .7s .1s ease both;cursor:pointer;user-select:none;}
+  .logo-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,8vw,3.5rem);color:var(--white);letter-spacing:8px;}
+  .logo-text span{color:var(--blue);}
+  .hero-sub{font-size:.8rem;letter-spacing:5px;color:var(--gray);text-transform:uppercase;margin-bottom:8px;animation:fadeUp .7s .2s ease both;}
+  .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,16vw,8rem);color:var(--white);line-height:.9;letter-spacing:4px;animation:fadeUp .7s .3s ease both;}
+  .hero-title span{color:var(--yellow);}
+  .hero-date{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.1rem,4vw,1.8rem);letter-spacing:6px;color:var(--blue);margin-top:12px;animation:fadeUp .7s .4s ease both;text-shadow:0 0 20px var(--blue-glow);}
+  .hero-edition{font-size:.68rem;letter-spacing:4px;color:rgba(255,255,255,.25);margin-top:6px;text-transform:uppercase;animation:fadeUp .7s .45s ease both;}
+  .hero-btns{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .55s ease both;}
+  .cta-btn{display:inline-block;padding:16px 44px;background:var(--blue);color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;border:none;border-radius:3px;cursor:pointer;box-shadow:0 0 24px var(--blue-glow);transition:transform .2s,box-shadow .2s;font-weight:900;text-decoration:none;}
+  .cta-btn:hover{transform:translateY(-3px);box-shadow:0 0 40px var(--blue-glow);}
+  .share-btn{display:inline-flex;align-items:center;gap:8px;padding:16px 30px;background:transparent;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;border:1px solid rgba(255,255,255,.15);border-radius:3px;cursor:pointer;transition:all .2s;}
+  .share-btn:hover{border-color:var(--white);background:rgba(255,255,255,.04);}
+  .stars{position:absolute;font-size:1rem;animation:starF 4s ease-in-out infinite;pointer-events:none;opacity:.3;}
   .star1{top:12%;left:6%;animation-delay:0s;color:var(--blue);}
   .star2{top:18%;right:8%;animation-delay:1s;color:var(--yellow);}
   .star3{bottom:22%;left:4%;animation-delay:2s;color:var(--yellow);}
   .star4{bottom:28%;right:6%;animation-delay:.5s;color:var(--blue);}
-  @keyframes starFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-12px) rotate(15deg);}}
+  @keyframes starF{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-12px) rotate(15deg);}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
 
-  /* ── DIVIDER ── */
-  .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,191,255,0.3), rgba(255,215,0,0.2), transparent); margin: 0 auto; }
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,191,255,.3),rgba(255,215,0,.2),transparent);margin:0 auto;}
+  .sec{padding:90px 20px;}
+  .sec-inner{max-width:900px;margin:0 auto;}
+  .sec-label{font-size:.62rem;letter-spacing:6px;color:var(--blue);text-transform:uppercase;margin-bottom:10px;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.8rem);line-height:1;margin-bottom:40px;color:var(--white);}
 
-  /* ── SECTION COMMONS ── */
-  .sec { padding: 90px 20px; }
-  .sec-inner { max-width: 900px; margin: 0 auto; }
-  .sec-label { font-size: 0.62rem; letter-spacing: 6px; color: var(--blue); text-transform: uppercase; margin-bottom: 10px; }
-  .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem,6vw,3.8rem); line-height: 1; margin-bottom: 40px; color: var(--white); }
+  /* TICKETS */
+  #tickets{background:rgba(0,191,255,.02);}
+  .ticket-stage{background:var(--dark2);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  .ticket-header{background:rgba(0,191,255,.06);border-bottom:1px solid rgba(0,191,255,.1);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .ticket-event-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:var(--white);}
+  .ticket-event-date{font-size:.68rem;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-top:2px;}
+  .ticket-badge{background:rgba(0,191,255,.1);border:1px solid rgba(0,191,255,.2);border-radius:2px;padding:4px 12px;font-size:.62rem;letter-spacing:3px;color:var(--blue);text-transform:uppercase;}
+  .tanda-row{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap;transition:background .2s;}
+  .tanda-row:last-child{border-bottom:none;}
+  .tanda-row.active:hover{background:rgba(0,191,255,.03);}
+  .tanda-left{display:flex;align-items:center;gap:16px;}
+  .tanda-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .tanda-dot.green{background:#00ff88;box-shadow:0 0 8px #00ff88;animation:dotPulse 1.5s ease-in-out infinite;}
+  .tanda-dot.gray{background:rgba(255,255,255,.15);}
+  .tanda-dot.sold{background:rgba(255,255,255,.1);}
+  @keyframes dotPulse{0%,100%{box-shadow:0 0 4px #00ff88;}50%{box-shadow:0 0 14px #00ff88;}}
+  .tanda-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--white);}
+  .tanda-row.locked .tanda-name,.tanda-row.soldout .tanda-name{color:rgba(255,255,255,.3);}
+  .tanda-row.soldout .tanda-name{text-decoration:line-through;}
+  .tanda-desc{font-size:.65rem;letter-spacing:1px;color:var(--gray);margin-top:2px;}
+  .tanda-row.locked .tanda-desc{color:rgba(255,255,255,.2);}
+  .tanda-right{display:flex;align-items:center;gap:20px;flex-shrink:0;}
+  .tanda-price-tag{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);}
+  .tanda-row.active .tanda-price-tag{color:var(--blue);}
+  .tanda-row.locked .tanda-price-tag,.tanda-row.soldout .tanda-price-tag{color:rgba(255,255,255,.15);}
+  .tanda-free-tag{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#00ff88;}
+  .buy-tanda-btn{padding:10px 24px;background:var(--blue);color:#000;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;border:none;border-radius:3px;cursor:pointer;transition:transform .2s,opacity .2s;white-space:nowrap;}
+  .buy-tanda-btn.free{background:#00ff88;color:#000;}
+  .buy-tanda-btn:hover{transform:translateY(-2px);opacity:.88;}
+  .lock-tag{font-size:.62rem;letter-spacing:2px;color:rgba(255,255,255,.2);text-transform:uppercase;border:1px solid rgba(255,255,255,.08);border-radius:2px;padding:6px 12px;}
+  .sold-tag{font-size:.62rem;letter-spacing:2px;color:rgba(255,255,255,.2);text-transform:uppercase;border:1px solid rgba(255,255,255,.06);border-radius:2px;padding:6px 12px;}
+  .ticket-footer{padding:16px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .ticket-footer-text{font-size:.62rem;letter-spacing:1.5px;color:rgba(255,255,255,.2);}
 
-  /* ── TICKET / TANDAS ── */
-  #tickets { background: rgba(0,191,255,0.02); }
-  .ticket-stage {
-    background: var(--dark2); border: 1px solid var(--border);
-    border-radius: 6px; overflow: hidden;
-  }
-  .ticket-header {
-    background: rgba(0,191,255,0.06); border-bottom: 1px solid rgba(0,191,255,0.1);
-    padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-  }
-  .ticket-event-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--white); }
-  .ticket-event-date { font-size: 0.68rem; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; margin-top: 2px; }
-  .ticket-badge { background: rgba(0,191,255,0.1); border: 1px solid rgba(0,191,255,0.2); border-radius: 2px; padding: 4px 12px; font-size: 0.62rem; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; }
+  /* DJs */
+  .dj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .dj-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:28px 16px;text-align:center;transition:border-color .3s,transform .3s;}
+  .dj-card:hover{border-color:var(--blue);transform:translateY(-4px);}
+  .dj-logo{width:100%;max-width:130px;height:70px;object-fit:contain;filter:brightness(0) invert(1) opacity(.85);transition:filter .3s,transform .3s;display:block;margin:0 auto;}
+  .dj-card:hover .dj-logo{filter:brightness(0) invert(1) drop-shadow(0 0 8px var(--blue));transform:scale(1.05);}
+  .dj-logo.mandita{filter:brightness(0) invert(1) opacity(.9);}
+  .dj-logo.lucas{filter:none;mix-blend-mode:screen;opacity:.85;}
+  .dj-card:hover .dj-logo.lucas{mix-blend-mode:screen;opacity:1;filter:drop-shadow(0 0 8px var(--blue));}
+  .dj-guest{display:flex;flex-direction:column;align-items:center;justify-content:center;height:70px;gap:4px;}
+  .dj-guest-q{font-size:1.6rem;opacity:.25;}
+  .dj-guest-txt{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;color:rgba(255,255,255,.25);}
+  .dj-soon{font-size:.5rem;letter-spacing:3px;color:rgba(255,255,255,.12);margin-top:2px;}
 
-  .tanda-list { padding: 0; }
-  .tanda-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 22px 28px; border-bottom: 1px solid var(--border);
-    gap: 16px; flex-wrap: wrap;
-    transition: background 0.2s;
-  }
-  .tanda-row:last-child { border-bottom: none; }
-  .tanda-row.active:hover { background: rgba(0,191,255,0.03); }
-  .tanda-left { display: flex; align-items: center; gap: 16px; }
-  .tanda-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .tanda-dot.green { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
-  .tanda-dot.gray { background: rgba(255,255,255,0.15); }
-  .tanda-dot.sold { background: rgba(255,255,255,0.1); }
-  .tanda-info {}
-  .tanda-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--white); }
-  .tanda-row.locked .tanda-name { color: rgba(255,255,255,0.3); }
-  .tanda-row.soldout .tanda-name { color: rgba(255,255,255,0.3); text-decoration: line-through; }
-  .tanda-desc { font-size: 0.65rem; letter-spacing: 1px; color: var(--gray); margin-top: 2px; }
-  .tanda-row.locked .tanda-desc { color: rgba(255,255,255,0.2); }
-  .tanda-right { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
-  .tanda-price-tag { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--white); }
-  .tanda-row.active .tanda-price-tag { color: var(--blue); }
-  .tanda-row.locked .tanda-price-tag { color: rgba(255,255,255,0.2); }
-  .tanda-row.soldout .tanda-price-tag { color: rgba(255,255,255,0.15); }
-  .buy-tanda-btn { padding: 10px 24px; background: var(--blue); color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; border: none; border-radius: 3px; cursor: pointer; transition: transform 0.2s, opacity 0.2s; white-space: nowrap; }
-  .buy-tanda-btn:hover { transform: translateY(-2px); opacity: 0.88; }
-  .lock-tag { font-size: 0.62rem; letter-spacing: 2px; color: rgba(255,255,255,0.2); text-transform: uppercase; border: 1px solid rgba(255,255,255,0.08); border-radius: 2px; padding: 6px 12px; }
-  .sold-tag { font-size: 0.62rem; letter-spacing: 2px; color: rgba(255,255,255,0.2); text-transform: uppercase; border: 1px solid rgba(255,255,255,0.06); border-radius: 2px; padding: 6px 12px; }
-  .ticket-footer { padding: 16px 28px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-  .ticket-footer-icon { font-size: 0.9rem; opacity: 0.4; }
-  .ticket-footer-text { font-size: 0.62rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.2); }
+  /* REEL */
+  .reel-frame{max-width:360px;margin:0 auto;border-radius:6px;overflow:hidden;border:1px solid var(--border);background:var(--dark2);aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;}
+  .reel-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .reel-placeholder .ri{font-size:2.5rem;opacity:.2;}
+  .reel-placeholder p{font-size:.68rem;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;}
+  .reel-frame iframe{width:100%;height:100%;border:none;}
+  .ig-follow{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:12px 24px;border:1px solid rgba(255,255,255,.12);border-radius:3px;color:var(--white);text-decoration:none;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;transition:all .2s;}
+  .ig-follow:hover{border-color:var(--white);background:rgba(255,255,255,.04);}
 
-  /* ── DJs ── */
-  .dj-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-  .dj-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 4px; padding: 28px 16px; text-align: center; transition: border-color 0.3s, transform 0.3s; }
-  .dj-card:hover { border-color: var(--blue); transform: translateY(-4px); }
-  .dj-logo { width:100%; max-width:130px; height:70px; object-fit:contain; filter: brightness(0) invert(1) opacity(0.85); transition: filter 0.3s, transform 0.3s; display:block; margin:0 auto; }
-  .dj-card:hover .dj-logo { filter: brightness(0) invert(1) drop-shadow(0 0 8px var(--blue)); transform: scale(1.05); }
-  .dj-logo.mandita { filter: brightness(0) invert(1) opacity(0.9); }
-  .dj-logo.lucas { filter:none; mix-blend-mode:screen; opacity:.85; }
-  .dj-card:hover .dj-logo.lucas { mix-blend-mode:screen; opacity:1; filter: drop-shadow(0 0 8px var(--blue)); }
-  .dj-guest { display:flex; flex-direction:column; align-items:center; justify-content:center; height:70px; gap:4px; }
-  .dj-guest-q { font-size:1.6rem; opacity:.25; }
-  .dj-guest-txt { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:3px; color:rgba(255,255,255,.25); }
-  .dj-soon { font-size:0.5rem; letter-spacing:3px; color:rgba(255,255,255,.12); margin-top:2px; }
+  /* GENRES */
+  .genre-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .tag{padding:7px 16px;border-radius:2px;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);background:transparent;transition:all .2s;animation:tagF var(--d,3s) ease-in-out infinite;animation-delay:var(--dd,0s);}
+  .tag:hover{background:var(--blue);color:#000;border-color:var(--blue);}
+  @keyframes tagF{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+  .no-tag{margin-top:28px;font-size:.6rem;letter-spacing:4px;color:rgba(255,255,255,.18);text-transform:uppercase;}
+  .no-genres{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:10px;}
+  .no-genre{padding:5px 12px;border-radius:2px;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.15);text-decoration:line-through;}
 
-  /* ── REEL ── */
-  #reel { text-align: center; }
-  .reel-frame {
-    max-width: 360px; margin: 0 auto;
-    border-radius: 6px; overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--dark2);
-    aspect-ratio: 9/16;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .reel-placeholder { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .reel-placeholder .ri { font-size: 2.5rem; opacity: 0.2; }
-  .reel-placeholder p { font-size: 0.68rem; letter-spacing: 3px; color: rgba(255,255,255,0.2); text-transform: uppercase; }
-  .reel-frame iframe { width: 100%; height: 100%; border: none; }
-  .ig-follow { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 12px 24px; border: 1px solid rgba(255,255,255,0.12); border-radius: 3px; color: var(--white); text-decoration: none; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; transition: all 0.2s; }
-  .ig-follow:hover { border-color: var(--white); background: rgba(255,255,255,0.04); }
-  .ig-icon { font-size: 1.1rem; }
+  /* INFO */
+  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .info-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:28px 16px;text-align:center;transition:border-color .3s;}
+  .info-card:hover{border-color:var(--yellow);}
+  .info-icon{font-size:1.8rem;margin-bottom:10px;}
+  .info-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:5px;}
+  .info-card p{font-size:.72rem;color:var(--gray);line-height:1.6;}
 
-  /* ── GENRES ── */
-  .genre-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .tag { padding: 7px 16px; border-radius: 2px; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.55); background: transparent; transition: all 0.2s; animation: tagFloat var(--d,3s) ease-in-out infinite; animation-delay: var(--dd,0s); }
-  .tag:hover { background: var(--blue); color: #000; border-color: var(--blue); }
-  @keyframes tagFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
-  .no-tag { margin-top: 28px; font-size:0.6rem; letter-spacing:4px; color:rgba(255,255,255,.18); text-transform:uppercase; }
-  .no-genres { display:flex; flex-wrap:wrap; gap:7px; justify-content:center; margin-top:10px; }
-  .no-genre { padding:5px 12px; border-radius:2px; font-size:0.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; border:1px solid rgba(255,255,255,.06); color:rgba(255,255,255,.15); text-decoration:line-through; }
+  /* MAPA */
+  .map-wrap{border-radius:6px;overflow:hidden;border:1px solid var(--border);max-width:700px;margin:0 auto;}
+  .map-wrap iframe{width:100%;height:340px;border:none;filter:grayscale(1) invert(1) contrast(.85);}
 
-  /* ── INFO ── */
-  .info-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-  .info-card { background:rgba(255,255,255,.02); border:1px solid var(--border); border-radius:4px; padding:28px 16px; text-align:center; transition:border-color .3s; }
-  .info-card:hover { border-color:var(--yellow); }
-  .info-icon { font-size:1.8rem; margin-bottom:10px; }
-  .info-card h3 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:2px; margin-bottom:5px; }
-  .info-card p { font-size:0.72rem; color:var(--gray); line-height:1.6; }
+  /* REDES */
+  .social-links{display:flex;justify-content:center;gap:16px;margin-top:30px;flex-wrap:wrap;}
+  .social-link{display:flex;align-items:center;gap:10px;padding:14px 28px;border:1px solid var(--border);border-radius:3px;color:var(--white);text-decoration:none;font-size:.78rem;letter-spacing:3px;text-transform:uppercase;transition:all .2s;}
+  .social-link:hover{border-color:var(--blue);background:rgba(0,191,255,.04);color:var(--blue);}
+  .social-icon{font-size:1.4rem;}
 
-  /* ── MAPA ── */
-  #mapa { text-align:center; }
-  .map-wrap { border-radius:6px; overflow:hidden; border:1px solid var(--border); max-width:700px; margin:0 auto; }
-  .map-wrap iframe { width:100%; height:340px; border:none; filter: grayscale(1) invert(1) contrast(0.85); }
+  /* MODAL COMPRA */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{background:#0c0c0c;border:1px solid rgba(0,191,255,.25);border-radius:6px;padding:36px 28px;width:100%;max-width:440px;position:relative;transform:scale(.93) translateY(14px);transition:transform .3s;box-shadow:0 0 50px rgba(0,191,255,.08);overflow-y:auto;max-height:90vh;}
+  .modal-overlay.open .modal{transform:scale(1) translateY(0);}
+  .modal-close{position:absolute;top:12px;right:16px;background:none;border:none;color:rgba(255,255,255,.3);font-size:1.5rem;cursor:pointer;transition:color .2s;}
+  .modal-close:hover{color:var(--white);}
+  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--white);margin-bottom:4px;}
+  .modal-tanda-lbl{font-size:.6rem;letter-spacing:4px;color:var(--blue);text-transform:uppercase;margin-bottom:22px;}
+  .form-group{margin-bottom:14px;}
+  .form-group label{display:block;font-size:.6rem;letter-spacing:3px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:5px;}
+  .form-group input,.form-group select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:11px 13px;color:#fff;font-family:'Montserrat',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
+  .form-group input:focus,.form-group select:focus{border-color:var(--blue);}
+  .form-group select option{background:#0c0c0c;}
+  .price-box{background:rgba(0,191,255,.05);border:1px solid rgba(0,191,255,.12);border-radius:4px;padding:14px;text-align:center;margin-bottom:18px;}
+  .price-box.free-box{background:rgba(0,255,136,.05);border-color:rgba(0,255,136,.2);}
+  .price-box .plbl{font-size:.58rem;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:2px;}
+  .price-box .pamt{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--blue);}
+  .price-box.free-box .pamt{color:#00ff88;}
+  .account-box{background:rgba(255,255,255,.02);border-radius:4px;padding:13px;margin-bottom:18px;font-size:.72rem;line-height:1.9;color:rgba(255,255,255,.4);}
+  .account-box strong{color:var(--white);}
+  .wpp-btn{display:block;width:100%;padding:14px;background:#25D366;border:none;border-radius:3px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;cursor:pointer;transition:opacity .2s,transform .2s;}
+  .wpp-btn:hover{opacity:.88;transform:translateY(-2px);}
+  .modal-note{font-size:.6rem;text-align:center;color:rgba(255,255,255,.2);margin-top:12px;line-height:1.5;}
 
-  /* ── REDES ── */
-  #redes { text-align:center; }
-  .social-links { display:flex; justify-content:center; gap:16px; margin-top:30px; flex-wrap:wrap; }
-  .social-link { display:flex; align-items:center; gap:10px; padding:14px 28px; border:1px solid var(--border); border-radius:3px; color:var(--white); text-decoration:none; font-size:0.78rem; letter-spacing:3px; text-transform:uppercase; transition:all .2s; }
-  .social-link:hover { border-color:var(--blue); background:rgba(0,191,255,.04); color:var(--blue); }
-  .social-icon { font-size:1.4rem; }
+  /* MODAL QR (confirmación post-pago) */
+  .qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);z-index:1500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+  .qr-overlay.open{opacity:1;pointer-events:all;}
+  .qr-modal{background:#0c0c0c;border:1px solid rgba(0,255,136,.25);border-radius:6px;padding:36px 28px;width:100%;max-width:400px;text-align:center;position:relative;transform:scale(.93);transition:transform .3s;}
+  .qr-overlay.open .qr-modal{transform:scale(1);}
+  .qr-close{position:absolute;top:12px;right:16px;background:none;border:none;color:rgba(255,255,255,.3);font-size:1.5rem;cursor:pointer;}
+  .qr-close:hover{color:var(--white);}
+  .qr-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:#00ff88;margin-bottom:4px;}
+  .qr-sub{font-size:.62rem;letter-spacing:3px;color:var(--gray);margin-bottom:20px;text-transform:uppercase;}
+  #qrCanvas{margin:0 auto 16px;background:#fff;padding:12px;border-radius:4px;display:inline-block;}
+  .qr-code-txt{font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:16px;}
+  .qr-info{font-size:.7rem;color:var(--gray);line-height:1.7;margin-bottom:20px;}
+  .qr-email-note{font-size:.62rem;color:rgba(0,255,136,.6);letter-spacing:1px;}
 
-  /* ── MODAL COMPRA ── */
-  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; }
-  .modal-overlay.open { opacity:1; pointer-events:all; }
-  .modal { background:#0c0c0c; border:1px solid rgba(0,191,255,.25); border-radius:6px; padding:36px 28px; width:100%; max-width:420px; position:relative; transform:scale(.93) translateY(14px); transition:transform .3s; box-shadow:0 0 50px rgba(0,191,255,.08); overflow-y:auto; max-height:90vh; }
-  .modal-overlay.open .modal { transform:scale(1) translateY(0); }
-  .modal-close { position:absolute; top:12px; right:16px; background:none; border:none; color:rgba(255,255,255,.3); font-size:1.5rem; cursor:pointer; transition:color .2s; }
-  .modal-close:hover { color:var(--white); }
-  .modal-title { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:3px; color:var(--white); margin-bottom:4px; }
-  .modal-tanda-lbl { font-size:0.6rem; letter-spacing:4px; color:var(--blue); text-transform:uppercase; margin-bottom:22px; }
-  .form-group { margin-bottom:14px; }
-  .form-group label { display:block; font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,.35); text-transform:uppercase; margin-bottom:5px; }
-  .form-group input, .form-group select { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:3px; padding:11px 13px; color:#fff; font-family:'Montserrat',sans-serif; font-size:0.88rem; outline:none; transition:border-color .2s; -webkit-appearance:none; appearance:none; }
-  .form-group input:focus, .form-group select:focus { border-color:var(--blue); }
-  .form-group select option { background:#0c0c0c; }
-  .price-box { background:rgba(0,191,255,.05); border:1px solid rgba(0,191,255,.12); border-radius:4px; padding:14px; text-align:center; margin-bottom:18px; }
-  .price-box .plbl { font-size:0.58rem; letter-spacing:3px; color:var(--gray); text-transform:uppercase; margin-bottom:2px; }
-  .price-box .pamt { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; color:var(--blue); }
-  .account-box { background:rgba(255,255,255,.02); border-radius:4px; padding:13px; margin-bottom:18px; font-size:0.72rem; line-height:1.9; color:rgba(255,255,255,.4); }
-  .account-box strong { color:var(--white); }
-  .wpp-btn { display:block; width:100%; padding:14px; background:#25D366; border:none; border-radius:3px; color:#fff; font-family:'Bebas Neue',sans-serif; font-size:1.15rem; letter-spacing:2px; cursor:pointer; transition:opacity .2s, transform .2s; }
-  .wpp-btn:hover { opacity:.88; transform:translateY(-2px); }
-  .modal-note { font-size:0.6rem; text-align:center; color:rgba(255,255,255,.2); margin-top:12px; line-height:1.5; }
+  /* ADMIN */
+  .admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.96);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+  .admin-overlay.open{opacity:1;pointer-events:all;}
+  .admin-modal{background:#0a0a0a;border:1px solid rgba(255,215,0,.25);border-radius:6px;padding:36px 28px;width:100%;max-width:380px;position:relative;transform:scale(.92);transition:transform .3s;}
+  .admin-overlay.open .admin-modal{transform:scale(1);}
+  .admin-panel{background:#0a0a0a;border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:28px;width:100%;max-width:600px;position:relative;max-height:88vh;overflow-y:auto;}
+  .admin-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;color:var(--yellow);text-align:center;margin-bottom:4px;}
+  .admin-sub{font-size:.6rem;letter-spacing:3px;color:rgba(255,255,255,.2);text-align:center;margin-bottom:24px;text-transform:uppercase;}
+  .admin-modal .form-group input{border-color:rgba(255,215,0,.12);}
+  .admin-modal .form-group input:focus{border-color:var(--yellow);}
+  .admin-login-btn{display:block;width:100%;padding:13px;background:var(--yellow);border:none;border-radius:3px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:opacity .2s;}
+  .admin-login-btn:hover{opacity:.85;}
+  .admin-error{font-size:.68rem;color:#ff4444;text-align:center;margin-top:10px;display:none;}
+  .admin-close{position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(255,255,255,.3);font-size:1.3rem;cursor:pointer;}
+  .admin-close:hover{color:var(--white);}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+  .stat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:14px;text-align:center;}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--yellow);}
+  .stat-lbl{font-size:.58rem;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-top:2px;}
+  .admin-list-ttl{font-size:.6rem;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin-bottom:10px;}
+  .sales-list{max-height:300px;overflow-y:auto;}
+  .sale-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.72rem;gap:10px;}
+  .sale-row:last-child{border-bottom:none;}
+  .sale-name{color:var(--white);font-weight:600;}
+  .sale-detail{color:var(--gray);font-size:.64rem;margin-top:1px;}
+  .sale-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+  .sale-t{font-family:'Bebas Neue',sans-serif;font-size:.85rem;}
+  .sale-t.t0{color:#00ff88;}
+  .sale-t.t1{color:var(--blue);}
+  .sale-t.t2{color:var(--yellow);}
+  .approve-btn{padding:4px 10px;background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.3);border-radius:2px;color:#00ff88;font-size:.6rem;letter-spacing:2px;cursor:pointer;font-family:'Bebas Neue',sans-serif;transition:all .2s;}
+  .approve-btn:hover{background:rgba(0,255,136,.3);}
+  .approved-badge{padding:4px 10px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.15);border-radius:2px;color:rgba(0,255,136,.5);font-size:.6rem;letter-spacing:2px;font-family:'Bebas Neue',sans-serif;}
+  .logout-btn{display:block;width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.08);border-radius:3px;color:rgba(255,255,255,.25);font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;cursor:pointer;margin-top:18px;transition:all .2s;}
+  .logout-btn:hover{border-color:rgba(255,255,255,.25);color:var(--white);}
 
-  /* ── ADMIN ── */
-  .admin-overlay { position:fixed; inset:0; background:rgba(0,0,0,.96); backdrop-filter:blur(12px); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; }
-  .admin-overlay.open { opacity:1; pointer-events:all; }
-  .admin-modal { background:#0a0a0a; border:1px solid rgba(255,215,0,.25); border-radius:6px; padding:36px 28px; width:100%; max-width:380px; position:relative; transform:scale(.92); transition:transform .3s; }
-  .admin-overlay.open .admin-modal { transform:scale(1); }
-  .admin-panel { background:#0a0a0a; border:1px solid rgba(255,215,0,.2); border-radius:6px; padding:28px; width:100%; max-width:540px; position:relative; max-height:88vh; overflow-y:auto; }
-  .admin-title { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:4px; color:var(--yellow); text-align:center; margin-bottom:4px; }
-  .admin-sub { font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,.2); text-align:center; margin-bottom:24px; text-transform:uppercase; }
-  .admin-modal .form-group input { border-color:rgba(255,215,0,.12); }
-  .admin-modal .form-group input:focus { border-color:var(--yellow); }
-  .admin-login-btn { display:block; width:100%; padding:13px; background:var(--yellow); border:none; border-radius:3px; color:#000; font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; cursor:pointer; transition:opacity .2s; }
-  .admin-login-btn:hover { opacity:.85; }
-  .admin-error { font-size:0.68rem; color:#ff4444; text-align:center; margin-top:10px; display:none; }
-  .admin-close { position:absolute; top:12px; right:14px; background:none; border:none; color:rgba(255,255,255,.3); font-size:1.3rem; cursor:pointer; }
-  .admin-close:hover { color:var(--white); }
-  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:22px; }
-  .stat-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); border-radius:4px; padding:14px; text-align:center; }
-  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--yellow); }
-  .stat-lbl { font-size:0.58rem; letter-spacing:3px; color:var(--gray); text-transform:uppercase; margin-top:2px; }
-  .admin-list-ttl { font-size:0.6rem; letter-spacing:4px; color:var(--gray); text-transform:uppercase; margin-bottom:10px; }
-  .sales-list { max-height:260px; overflow-y:auto; }
-  .sale-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:0.72rem; }
-  .sale-row:last-child { border-bottom:none; }
-  .sale-name { color:var(--white); font-weight:600; }
-  .sale-detail { color:var(--gray); font-size:0.64rem; margin-top:1px; }
-  .sale-t { font-family:'Bebas Neue',sans-serif; font-size:0.85rem; }
-  .sale-t.t1 { color:var(--blue); }
-  .sale-t.t2 { color:var(--yellow); }
-  .logout-btn { display:block; width:100%; padding:10px; background:transparent; border:1px solid rgba(255,255,255,.08); border-radius:3px; color:rgba(255,255,255,.25); font-family:'Bebas Neue',sans-serif; font-size:0.85rem; letter-spacing:2px; cursor:pointer; margin-top:18px; transition:all .2s; }
-  .logout-btn:hover { border-color:rgba(255,255,255,.25); color:var(--white); }
+  footer{text-align:center;padding:50px 20px;border-top:1px solid var(--border);margin-top:40px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--white);letter-spacing:6px;}
+  .footer-logo span{color:var(--blue);}
+  .footer-sub{font-size:.58rem;letter-spacing:4px;color:rgba(255,255,255,.18);margin-top:6px;text-transform:uppercase;}
 
-  /* ── FOOTER ── */
-  footer { text-align:center; padding:50px 20px; border-top:1px solid var(--border); margin-top:40px; }
-  .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--white); letter-spacing:6px; }
-  .footer-logo span { color:var(--blue); }
-  .footer-sub { font-size:0.58rem; letter-spacing:4px; color:rgba(255,255,255,.18); margin-top:6px; text-transform:uppercase; }
-
-  /* ── REVEAL ── */
-  .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
-  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
 
   @media(max-width:640px){
     .dj-grid{grid-template-columns:1fr;}
@@ -292,7 +242,7 @@
     .stat-grid{grid-template-columns:1fr;}
     .tanda-row{flex-direction:column;align-items:flex-start;}
     .tanda-right{width:100%;justify-content:space-between;}
-    .modal{padding:28px 18px;}
+    .modal,.qr-modal,.admin-modal,.admin-panel{padding:26px 18px;}
     .hero-btns{flex-direction:column;align-items:center;}
   }
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
@@ -314,15 +264,13 @@
 <!-- HERO -->
 <header id="hero">
   <div class="hero-glow"></div>
-  <span class="stars star1">✦</span>
-  <span class="stars star2">★</span>
-  <span class="stars star3">✦</span>
-  <span class="stars star4">★</span>
+  <span class="stars star1">✦</span><span class="stars star2">★</span>
+  <span class="stars star3">✦</span><span class="stars star4">★</span>
   <div class="badge-ed">SEGUNDA EDICIÓN · +18 AÑOS</div>
   <div class="logo-wrap" id="logoWrap">
     <div class="logo-text">JODITA <span>OK</span></div>
   </div>
-  <div class="hero-subtitle">Presenta</div>
+  <div class="hero-sub">Presenta</div>
   <div class="hero-title">LA <span>JODITA</span><br>VOL. 2</div>
   <div class="hero-date">VIERNES 6 DE NOVIEMBRE</div>
   <div class="hero-edition">Club Nacional · Colonia del Sacramento</div>
@@ -347,12 +295,9 @@
         </div>
         <div class="ticket-badge">VENTA ONLINE</div>
       </div>
-      <div class="tanda-list" id="tandaList">
-        <!-- Rendered by JS -->
-      </div>
+      <div id="tandaList"></div>
       <div class="ticket-footer">
-        <span class="ticket-footer-icon">ℹ️</span>
-        <span class="ticket-footer-text">La entrada se confirma enviando el comprobante de transferencia por WhatsApp · Retirá en puerta el día del evento</span>
+        <span class="ticket-footer-text">ℹ️ &nbsp;La entrada se confirma enviando comprobante por WhatsApp · Retirás en puerta el día del evento · Recibirás tu QR por email al ser aprobado</span>
       </div>
     </div>
   </div>
@@ -366,12 +311,8 @@
     <div class="sec-label reveal">Line-up</div>
     <div class="sec-title reveal">3 DJ'S EN VIVO</div>
     <div class="dj-grid">
-      <div class="dj-card reveal">
-        <img class="dj-logo mandita" src="channels4_profile.jpg" alt="DJ Mandita OK" />
-      </div>
-      <div class="dj-card reveal">
-        <img class="dj-logo lucas" src="LOGO_LUCAS_CABALLERO.png" alt="DJ Lucas Caballero" />
-      </div>
+      <div class="dj-card reveal"><img class="dj-logo mandita" src="channels4_profile.jpg" alt="DJ Mandita OK"/></div>
+      <div class="dj-card reveal"><img class="dj-logo lucas" src="LOGO_LUCAS_CABALLERO.png" alt="DJ Lucas Caballero"/></div>
       <div class="dj-card reveal">
         <div class="dj-guest">
           <div class="dj-guest-q">?</div>
@@ -391,17 +332,15 @@
     <div class="sec-label reveal">Primera Edición</div>
     <div class="sec-title reveal">EL AFTER</div>
     <div class="reel-frame reveal" id="reelFrame">
-      <!-- Para agregar el reel: reemplazá todo este div por:
-           <iframe src="https://www.instagram.com/reel/TU_ID/embed/" allowfullscreen></iframe>
-      -->
+      <!-- Cuando tengas el reel, reemplazá este div por:
+           <iframe src="https://www.instagram.com/reel/TU_ID/embed/" allowfullscreen></iframe> -->
       <div class="reel-placeholder">
         <div class="ri">🎬</div>
         <p>Reel próximamente</p>
       </div>
     </div>
     <a href="https://www.instagram.com/lajoditaok_/" target="_blank" class="ig-follow reveal">
-      <span class="ig-icon">📸</span>
-      @lajoditaok_
+      <span>📸</span> @lajoditaok_
     </a>
   </div>
 </section>
@@ -414,23 +353,16 @@
     <div class="sec-label reveal">Música</div>
     <div class="sec-title reveal">LO QUE VA A SONAR</div>
     <div class="genre-tags reveal">
-      <span class="tag" style="--d:3.2s">Dembow</span>
-      <span class="tag" style="--d:3.5s">Guaratech</span>
-      <span class="tag" style="--d:2.9s">Reggaeton</span>
-      <span class="tag" style="--d:3.8s">Techno</span>
-      <span class="tag" style="--d:3.1s">Funk</span>
-      <span class="tag" style="--d:3.6s">Flow BR</span>
-      <span class="tag" style="--d:2.8s">Trap</span>
-      <span class="tag" style="--d:3.3s">Latinos</span>
-      <span class="tag" style="--d:4s">Perreo RKT</span>
-      <span class="tag" style="--d:3.4s">Pop</span>
+      <span class="tag" style="--d:3.2s">Dembow</span><span class="tag" style="--d:3.5s">Guaratech</span>
+      <span class="tag" style="--d:2.9s">Reggaeton</span><span class="tag" style="--d:3.8s">Techno</span>
+      <span class="tag" style="--d:3.1s">Funk</span><span class="tag" style="--d:3.6s">Flow BR</span>
+      <span class="tag" style="--d:2.8s">Trap</span><span class="tag" style="--d:3.3s">Latinos</span>
+      <span class="tag" style="--d:4s">Perreo RKT</span><span class="tag" style="--d:3.4s">Pop</span>
     </div>
     <div class="no-tag reveal" style="margin-top:32px;">🚫 Prohibido</div>
     <div class="no-genres reveal">
-      <span class="no-genre">Cumbia</span>
-      <span class="no-genre">Plena</span>
-      <span class="no-genre">Rock</span>
-      <span class="no-genre">Cuarteto</span>
+      <span class="no-genre">Cumbia</span><span class="no-genre">Plena</span>
+      <span class="no-genre">Rock</span><span class="no-genre">Cuarteto</span>
     </div>
   </div>
 </section>
@@ -443,21 +375,9 @@
     <div class="sec-label reveal">El evento</div>
     <div class="sec-title reveal">TU NOCHE</div>
     <div class="info-grid">
-      <div class="info-card reveal">
-        <div class="info-icon">🍹</div>
-        <h3>Barra de Tragos</h3>
-        <p>Barra disponible toda la noche para que no pares.</p>
-      </div>
-      <div class="info-card reveal">
-        <div class="info-icon">🛡️</div>
-        <h3>Seguridad</h3>
-        <p>Personal de seguridad durante toda la noche.</p>
-      </div>
-      <div class="info-card reveal">
-        <div class="info-icon">🎟️</div>
-        <h3>Solo con Entrada</h3>
-        <p>Ingreso exclusivo con entrada. Venta solo online, retiro en puerta.</p>
-      </div>
+      <div class="info-card reveal"><div class="info-icon">🍹</div><h3>Barra de Tragos</h3><p>Barra disponible toda la noche.</p></div>
+      <div class="info-card reveal"><div class="info-icon">🛡️</div><h3>Seguridad</h3><p>Personal de seguridad durante toda la noche.</p></div>
+      <div class="info-card reveal"><div class="info-icon">🎟️</div><h3>Solo con Entrada</h3><p>Ingreso exclusivo con entrada. Venta solo online, retiro en puerta.</p></div>
     </div>
   </div>
 </section>
@@ -470,12 +390,9 @@
     <div class="sec-label reveal" style="text-align:center;">Ubicación</div>
     <div class="sec-title reveal" style="text-align:center;">CÓMO LLEGAR</div>
     <div class="map-wrap reveal">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3275.7!2d-57.8404896!3d-34.4705604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3126fea73ac33%3A0x98e3a3b1e9fa4a88!2sClub%20Nacional%20De%20F%C3%BAtbol!5e0!3m2!1ses!2suy!4v1"
-        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3275.7!2d-57.8404896!3d-34.4705604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3126fea73ac33%3A0x98e3a3b1e9fa4a88!2sClub%20Nacional%20De%20F%C3%BAtbol!5e0!3m2!1ses!2suy!4v1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-    <p style="text-align:center;margin-top:14px;font-size:0.68rem;letter-spacing:2px;color:rgba(255,255,255,.25);">Club Nacional · Colonia del Sacramento</p>
+    <p style="text-align:center;margin-top:14px;font-size:.68rem;letter-spacing:2px;color:rgba(255,255,255,.25);">Club Nacional · Colonia del Sacramento</p>
   </div>
 </section>
 
@@ -488,8 +405,7 @@
     <div class="sec-title reveal">REDES</div>
     <div class="social-links reveal">
       <a href="https://www.instagram.com/lajoditaok_/" target="_blank" class="social-link">
-        <span class="social-icon">📸</span>
-        <span>@lajoditaok_</span>
+        <span class="social-icon">📸</span><span>@lajoditaok_</span>
       </a>
     </div>
   </div>
@@ -506,52 +422,52 @@
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-title">COMPRÁ TU ENTRADA</div>
     <div class="modal-tanda-lbl" id="modalTandaLbl">CARGANDO...</div>
-    <div class="form-group">
-      <label>Nombre</label>
-      <input type="text" id="firstName" placeholder="Tu nombre" />
-    </div>
-    <div class="form-group">
-      <label>Apellido</label>
-      <input type="text" id="lastName" placeholder="Tu apellido" />
-    </div>
+    <div class="form-group"><label>Nombre</label><input type="text" id="firstName" placeholder="Tu nombre"/></div>
+    <div class="form-group"><label>Apellido</label><input type="text" id="lastName" placeholder="Tu apellido"/></div>
+    <div class="form-group"><label>Email (para recibir tu QR)</label><input type="email" id="userEmail" placeholder="tu@email.com"/></div>
     <div class="form-group">
       <label>¿Cuántas entradas?</label>
       <select id="qty" onchange="updatePrice()">
-        <option value="1">1 entrada</option>
-        <option value="2">2 entradas</option>
-        <option value="3">3 entradas</option>
-        <option value="4">4 entradas</option>
+        <option value="1">1 entrada</option><option value="2">2 entradas</option>
+        <option value="3">3 entradas</option><option value="4">4 entradas</option>
         <option value="5">5 entradas</option>
       </select>
     </div>
-    <div class="price-box">
+    <div class="price-box" id="priceBox">
       <div class="plbl">Total a transferir</div>
       <div class="pamt" id="totalPrice">$250</div>
     </div>
-    <div class="account-box">
+    <div class="account-box" id="accountBox">
       <strong>Cuenta PREX</strong><br>
       Número: <strong>1511259</strong><br>
       Titular: <strong>Amanda Pérez</strong><br><br>
-      <span style="font-size:0.66rem;">Transferí el monto y enviá el comprobante por WhatsApp para confirmar tu entrada.</span>
+      <span style="font-size:.66rem;">Transferí el monto y confirmá por WhatsApp con el comprobante.</span>
     </div>
     <button class="wpp-btn" onclick="confirmarCompra()">💬 CONFIRMAR POR WHATSAPP</button>
-    <p class="modal-note">Retirás tu entrada en puerta el día del evento.</p>
+    <p class="modal-note">Recibirás tu QR por email una vez aprobado el pago · Retirás en puerta el día del evento</p>
   </div>
 </div>
 
-<!-- ADMIN LOGIN -->
+<!-- MODAL QR -->
+<div class="qr-overlay" id="qrOverlay">
+  <div class="qr-modal">
+    <button class="qr-close" onclick="closeQR()">×</button>
+    <div class="qr-title">✓ ENTRADA CONFIRMADA</div>
+    <div class="qr-sub">Tu código QR de acceso</div>
+    <div id="qrCanvas"></div>
+    <div class="qr-code-txt" id="qrCodeTxt"></div>
+    <div class="qr-info" id="qrInfo"></div>
+    <div class="qr-email-note" id="qrEmailNote"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
 <div class="admin-overlay" id="adminOverlay" onclick="closeAdminOutside(event)">
   <div id="adminLoginBox" class="admin-modal">
     <div class="admin-title">PANEL ADMIN</div>
     <div class="admin-sub">Acceso restringido</div>
-    <div class="form-group">
-      <label>Usuario</label>
-      <input type="text" id="adminUser" placeholder="Usuario" autocomplete="off" />
-    </div>
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" id="adminPass" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')doAdminLogin()" />
-    </div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="adminUser" placeholder="Usuario" autocomplete="off"/></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="adminPass" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
     <button class="admin-login-btn" onclick="doAdminLogin()">INGRESAR</button>
     <div class="admin-error" id="adminError">Usuario o contraseña incorrectos</div>
   </div>
@@ -561,148 +477,233 @@
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-num" id="statTotal">-</div><div class="stat-lbl">Total vendidas</div></div>
       <div class="stat-card"><div class="stat-num" id="statTanda">-</div><div class="stat-lbl">Tanda activa</div></div>
+      <div class="stat-card"><div class="stat-num" id="statT0">-</div><div class="stat-lbl">Free · $0</div></div>
       <div class="stat-card"><div class="stat-num" id="statT1">-</div><div class="stat-lbl">Tanda 1 · $250</div></div>
       <div class="stat-card"><div class="stat-num" id="statT2">-</div><div class="stat-lbl">Tanda 2 · $300</div></div>
     </div>
-    <div class="admin-list-ttl">Compradores</div>
+    <div class="admin-list-ttl">Compradores — Aprobar pago y enviar QR</div>
     <div class="sales-list" id="salesList"></div>
     <button class="logout-btn" onclick="adminLogout()">CERRAR SESIÓN</button>
   </div>
 </div>
 
-<!-- Firebase -->
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const app = initializeApp({
-    apiKey: "AIzaSyB8Ubsq0GEjMZmT6as1mYDF-fEFfu0c51U",
-    authDomain: "lajoditaok.firebaseapp.com",
-    projectId: "lajoditaok",
-    storageBucket: "lajoditaok.firebasestorage.app",
-    messagingSenderId: "292261003770",
-    appId: "1:292261003770:web:1f7453f78ae60044d4a443"
+    apiKey:"AIzaSyB8Ubsq0GEjMZmT6as1mYDF-fEFfu0c51U",
+    authDomain:"lajoditaok.firebaseapp.com",
+    projectId:"lajoditaok",
+    storageBucket:"lajoditaok.firebasestorage.app",
+    messagingSenderId:"292261003770",
+    appId:"1:292261003770:web:1f7453f78ae60044d4a443"
   });
   const db = getFirestore(app);
 
-  const TANDA1_MAX = 20, TANDA2_MAX = 30;
-  window._db = db; window._sold = 0; window._currentTanda = 1; window._currentPrice = 250;
+  emailjs.init("-E0E-rOsJcc_YseI3");
 
-  async function sha256(msg) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  const FREE_MAX=10, TANDA1_MAX=20, TANDA2_MAX=30;
+  window._db=db; window._currentTanda=0; window._currentPrice=0;
+
+  async function sha256(msg){
+    const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
     return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
   }
-  const H_USER = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
-  const H_PASS_PROMISE = sha256("LaJodit4.OK");
+  const H_USER="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+  const H_PASS_P=sha256("LaJodit4.OK");
 
-  async function loadState() {
-    const snap = await getDoc(doc(db,"config","ventas_v2"));
+  function genCode(){return 'JOK-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();}
+
+  async function loadState(){
+    const snap=await getDoc(doc(db,"config","ventas_v2"));
     if(!snap.exists()){
-      await setDoc(doc(db,"config","ventas_v2"),{total:0,tanda1:0,tanda2:0});
-      return {total:0,tanda1:0,tanda2:0};
+      await setDoc(doc(db,"config","ventas_v2"),{total:0,free:0,tanda1:0,tanda2:0});
+      return {total:0,free:0,tanda1:0,tanda2:0};
     }
     return snap.data();
   }
 
-  async function refreshUI() {
-    const data = await loadState();
-    const t1 = data.tanda1||0, t2 = data.tanda2||0;
-    window._sold = data.total||0;
-    if(t1 < TANDA1_MAX){ window._currentTanda=1; window._currentPrice=250; }
-    else if(t2 < TANDA2_MAX){ window._currentTanda=2; window._currentPrice=300; }
-    else { window._currentTanda=0; window._currentPrice=0; }
-    renderTandas(t1,t2);
+  async function refreshUI(){
+    const data=await loadState();
+    const f=data.free||0, t1=data.tanda1||0, t2=data.tanda2||0;
+    if(f<FREE_MAX){window._currentTanda=0;window._currentPrice=0;}
+    else if(t1<TANDA1_MAX){window._currentTanda=1;window._currentPrice=250;}
+    else if(t2<TANDA2_MAX){window._currentTanda=2;window._currentPrice=300;}
+    else{window._currentTanda=-1;window._currentPrice=0;}
+    renderTandas(f,t1,t2);
     updateModalLabel();
     updatePriceDisplay();
   }
 
-  function renderTandas(t1,t2){
-    const list = document.getElementById('tandaList');
-    const t1sold = t1>=TANDA1_MAX;
-    const t2locked = !t1sold;
-    const t2sold = !t2locked && t2>=TANDA2_MAX;
-    list.innerHTML = `
-      <div class="tanda-row ${t1sold?'soldout':'active'}">
+  function renderTandas(f,t1,t2){
+    const list=document.getElementById('tandaList');
+    const fSold=f>=FREE_MAX, t1Sold=t1>=TANDA1_MAX, t2Sold=t2>=TANDA2_MAX;
+    const t1Locked=!fSold, t2Locked=!t1Sold||t1Locked;
+    list.innerHTML=`
+      <div class="tanda-row ${fSold?'soldout':'active'}">
         <div class="tanda-left">
-          <div class="tanda-dot ${t1sold?'sold':'green'}"></div>
-          <div class="tanda-info">
+          <div class="tanda-dot ${fSold?'sold':'green'}"></div>
+          <div>
+            <div class="tanda-name">TANDA FREE</div>
+            <div class="tanda-desc">${fSold?'Agotada':'Disponible ahora · Primeras 10 entradas'}</div>
+          </div>
+        </div>
+        <div class="tanda-right">
+          <div class="${fSold?'tanda-price-tag':'tanda-free-tag'}">GRATIS</div>
+          ${fSold?'<div class="sold-tag">AGOTADA</div>':'<button class="buy-tanda-btn free" onclick="openModal()">RESERVAR</button>'}
+        </div>
+      </div>
+      <div class="tanda-row ${t1Locked?'locked':t1Sold?'soldout':'active'}">
+        <div class="tanda-left">
+          <div class="tanda-dot ${t1Locked||t1Sold?'gray':'green'}"></div>
+          <div>
             <div class="tanda-name">PRIMERA TANDA</div>
-            <div class="tanda-desc">${t1sold?'Agotada':'Disponible ahora'}</div>
+            <div class="tanda-desc">${t1Locked?'Se habilita al agotar la tanda free':t1Sold?'Agotada':'Disponible ahora'}</div>
           </div>
         </div>
         <div class="tanda-right">
           <div class="tanda-price-tag">$250</div>
-          ${t1sold
-            ? '<div class="sold-tag">AGOTADA</div>'
-            : '<button class="buy-tanda-btn" onclick="openModal()">COMPRAR</button>'}
+          ${t1Locked?'<div class="lock-tag">🔒 BLOQUEADA</div>':t1Sold?'<div class="sold-tag">AGOTADA</div>':'<button class="buy-tanda-btn" onclick="openModal()">COMPRAR</button>'}
         </div>
       </div>
-      <div class="tanda-row ${t2locked?'locked':t2sold?'soldout':'active'}">
+      <div class="tanda-row ${t2Locked?'locked':t2Sold?'soldout':'active'}">
         <div class="tanda-left">
-          <div class="tanda-dot ${t2locked||t2sold?'gray':'green'}"></div>
-          <div class="tanda-info">
+          <div class="tanda-dot ${t2Locked||t2Sold?'gray':'green'}"></div>
+          <div>
             <div class="tanda-name">SEGUNDA TANDA</div>
-            <div class="tanda-desc">${t2locked?'Se habilita cuando se agote la primera':t2sold?'Agotada':'Disponible ahora'}</div>
+            <div class="tanda-desc">${t2Locked?'Se habilita al agotar la primera tanda':t2Sold?'Agotada':'Disponible ahora'}</div>
           </div>
         </div>
         <div class="tanda-right">
           <div class="tanda-price-tag">$300</div>
-          ${t2locked
-            ? '<div class="lock-tag">🔒 BLOQUEADA</div>'
-            : t2sold
-              ? '<div class="sold-tag">AGOTADA</div>'
-              : '<button class="buy-tanda-btn" onclick="openModal()">COMPRAR</button>'}
+          ${t2Locked?'<div class="lock-tag">🔒 BLOQUEADA</div>':t2Sold?'<div class="sold-tag">AGOTADA</div>':'<button class="buy-tanda-btn" onclick="openModal()">COMPRAR</button>'}
         </div>
       </div>`;
   }
 
   function updateModalLabel(){
     const el=document.getElementById('modalTandaLbl');
+    const pb=document.getElementById('priceBox');
+    const ab=document.getElementById('accountBox');
     if(!el)return;
-    if(window._currentTanda===0) el.textContent='ENTRADAS AGOTADAS';
-    else el.textContent=`TANDA ${window._currentTanda===1?'UNO':'DOS'} · $${window._currentPrice} POR ENTRADA`;
+    if(window._currentTanda===-1){el.textContent='ENTRADAS AGOTADAS';return;}
+    if(window._currentTanda===0){
+      el.textContent='TANDA FREE · GRATIS';
+      el.style.color='#00ff88';
+      pb.classList.add('free-box');
+      if(ab) ab.style.display='none';
+    } else {
+      el.textContent=`TANDA ${window._currentTanda===1?'UNO':'DOS'} · $${window._currentPrice} POR ENTRADA`;
+      el.style.color='var(--blue)';
+      pb.classList.remove('free-box');
+      if(ab) ab.style.display='block';
+    }
   }
 
   function updatePriceDisplay(){
     const qty=parseInt(document.getElementById('qty')?.value||1);
     const el=document.getElementById('totalPrice');
-    if(el) el.textContent='$'+(qty*window._currentPrice);
+    if(!el)return;
+    if(window._currentTanda===0){el.textContent='GRATIS';el.style.color='#00ff88';}
+    else{el.textContent='$'+(qty*window._currentPrice);el.style.color='var(--blue)';}
   }
-  window.updatePrice = updatePriceDisplay;
+  window.updatePrice=updatePriceDisplay;
 
-  window.confirmarCompra = async function(){
-    if(window._currentTanda===0){alert('Lo sentimos, las entradas están agotadas.');return;}
+  window.confirmarCompra=async function(){
+    if(window._currentTanda===-1){alert('Lo sentimos, las entradas están agotadas.');return;}
     const first=document.getElementById('firstName').value.trim();
     const last=document.getElementById('lastName').value.trim();
+    const email=document.getElementById('userEmail').value.trim();
     const qty=parseInt(document.getElementById('qty').value);
     if(!first||!last){alert('Por favor ingresá tu nombre y apellido.');return;}
-    const price=window._currentPrice, tanda=window._currentTanda, total=qty*price;
+    if(!email||!email.includes('@')){alert('Por favor ingresá un email válido para recibir tu QR.');return;}
+    const tanda=window._currentTanda, price=window._currentPrice, total=qty*price;
     const nombre=first+' '+last;
+    const code=genCode();
     try{
       const data=await loadState();
       const newTotal=(data.total||0)+qty;
+      const newFree=tanda===0?(data.free||0)+qty:(data.free||0);
       const newT1=tanda===1?(data.tanda1||0)+qty:(data.tanda1||0);
       const newT2=tanda===2?(data.tanda2||0)+qty:(data.tanda2||0);
-      await updateDoc(doc(db,"config","ventas_v2"),{total:newTotal,tanda1:newT1,tanda2:newT2});
-      await addDoc(collection(db,"ventas_v2"),{nombre,qty,tanda,precio:price,total,fecha:new Date().toISOString()});
+      await updateDoc(doc(db,"config","ventas_v2"),{total:newTotal,free:newFree,tanda1:newT1,tanda2:newT2});
+      await addDoc(collection(db,"ventas_v2"),{
+        nombre,email,qty,tanda,precio:price,total,code,
+        aprobado:false,fecha:new Date().toISOString()
+      });
       await refreshUI();
     }catch(e){console.error(e);}
-    const msg=encodeURIComponent(
-      `Hola! Quiero comprar ${qty} entrada${qty>1?'s':''} para La Jodita OK Vol. 2 (6/11).\n\n`+
-      `Nombre: ${nombre}\n`+
-      `Cantidad: ${qty} entrada${qty>1?'s':''}\n`+
-      `Tanda: ${tanda===1?'Primera ($250)':'Segunda ($300)'}\n`+
-      `Total: $${total}\n\n`+
-      `Ya realicé la transferencia a PREX 1511259 (Amanda Pérez). Te adjunto el comprobante.`
-    );
-    window.open(`https://wa.me/59898543384?text=${msg}`,'_blank');
+
+    if(tanda===0){
+      // Free: abrir WPP igualmente para registrar
+      const msg=encodeURIComponent(
+        `Hola! Quiero reservar ${qty} entrada${qty>1?'s':''} FREE para La Jodita OK Vol. 2 (6/11).\n\n`+
+        `Nombre: ${nombre}\n`+
+        `Email: ${email}\n`+
+        `Cantidad: ${qty} entrada${qty>1?'s':''}\n`+
+        `Código: ${code}\n\n`+
+        `Es tanda FREE, aguardo confirmación.`
+      );
+      window.open(`https://wa.me/59898543384?text=${msg}`,'_blank');
+    } else {
+      const msg=encodeURIComponent(
+        `Hola! Quiero comprar ${qty} entrada${qty>1?'s':''} para La Jodita OK Vol. 2 (6/11).\n\n`+
+        `Nombre: ${nombre}\n`+
+        `Email: ${email}\n`+
+        `Cantidad: ${qty} entrada${qty>1?'s':''}\n`+
+        `Tanda: ${tanda===1?'Primera ($250)':'Segunda ($300)'}\n`+
+        `Total: $${total}\n`+
+        `Código: ${code}\n\n`+
+        `Ya realicé la transferencia a PREX 1511259 (Amanda Pérez). Te adjunto el comprobante.`
+      );
+      window.open(`https://wa.me/59898543384?text=${msg}`,'_blank');
+    }
     closeModal();
+  };
+
+  // ── ENVIAR QR POR EMAIL (desde admin) ──
+  window.aprobarVenta=async function(docId,nombre,email,tanda,qty,code){
+    const tandaStr=tanda===0?'Free (Gratis)':tanda===1?'Primera ($250)':'Segunda ($300)';
+    // Generar QR como dataURL
+    const qrDiv=document.createElement('div');
+    document.body.appendChild(qrDiv);
+    const qr=new QRCode(qrDiv,{text:`JODITAOK-V2|${code}|${nombre}|${qty}`,width:200,height:200,colorDark:'#000',colorLight:'#fff'});
+    await new Promise(r=>setTimeout(r,500));
+    const canvas=qrDiv.querySelector('canvas');
+    const qrDataUrl=canvas?canvas.toDataURL('image/png'):'';
+    document.body.removeChild(qrDiv);
+
+    try{
+      await emailjs.send('service_ab199co','template_vfg13mh',{
+        to_email:email,
+        nombre:nombre,
+        tanda:tandaStr,
+        qty:qty,
+        code:code,
+        qr_image:qrDataUrl,
+        evento:'La Jodita OK Vol. 2',
+        fecha:'Viernes 6 de Noviembre',
+        lugar:'Club Nacional, Colonia del Sacramento'
+      });
+      // Marcar como aprobado en Firebase
+      const q=query(collection(db,"ventas_v2"));
+      const snap=await getDocs(q);
+      snap.forEach(async d=>{if(d.id===docId){await updateDoc(doc(db,"ventas_v2",d.id),{aprobado:true});}});
+      alert(`✅ QR enviado a ${email}`);
+      loadAdminPanel();
+    }catch(e){
+      console.error(e);
+      alert('Error al enviar el email. Revisá la consola.');
+    }
   };
 
   // ── ADMIN ──
   let logoTaps=0,logoTimer=null;
   document.getElementById('logoWrap').addEventListener('click',()=>{
-    logoTaps++; clearTimeout(logoTimer);
+    logoTaps++;clearTimeout(logoTimer);
     logoTimer=setTimeout(()=>{logoTaps=0;},1500);
     if(logoTaps>=5){logoTaps=0;openAdmin();}
   });
@@ -719,7 +720,7 @@
   window.doAdminLogin=async function(){
     const user=document.getElementById('adminUser').value.trim();
     const pass=document.getElementById('adminPass').value;
-    const [hU,hP,hReal]=await Promise.all([sha256(user),sha256(pass),H_PASS_PROMISE]);
+    const[hU,hP,hReal]=await Promise.all([sha256(user),sha256(pass),H_PASS_P]);
     if(hU===H_USER&&hP===hReal){
       document.getElementById('adminLoginBox').style.display='none';
       document.getElementById('adminPanelBox').style.display='block';
@@ -730,13 +731,16 @@
     document.getElementById('adminLoginBox').style.display='block';
     document.getElementById('adminPanelBox').style.display='none';
   };
+
   async function loadAdminPanel(){
     const data=await loadState();
     document.getElementById('statTotal').textContent=data.total||0;
+    document.getElementById('statT0').textContent=data.free||0;
     document.getElementById('statT1').textContent=data.tanda1||0;
     document.getElementById('statT2').textContent=data.tanda2||0;
-    const t=(data.tanda1||0)<TANDA1_MAX?'1 · $250':(data.tanda2||0)<TANDA2_MAX?'2 · $300':'AGOTADO';
-    document.getElementById('statTanda').textContent=t;
+    const f=data.free||0,t1=data.tanda1||0,t2=data.tanda2||0;
+    const tandaStr=f<FREE_MAX?'FREE':t1<TANDA1_MAX?'1 · $250':t2<TANDA2_MAX?'2 · $300':'AGOTADO';
+    document.getElementById('statTanda').textContent=tandaStr;
     const q=query(collection(db,"ventas_v2"),orderBy("fecha","desc"));
     const snap=await getDocs(q);
     const list=document.getElementById('salesList');
@@ -745,28 +749,42 @@
     snap.forEach(d=>{
       const v=d.data();
       const fecha=new Date(v.fecha).toLocaleDateString('es-UY',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-      list.innerHTML+=`<div class="sale-row"><div><div class="sale-name">${v.nombre}</div><div class="sale-detail">${fecha} · ${v.qty} entrada${v.qty>1?'s':''} · $${v.total}</div></div><div class="sale-t t${v.tanda}">T${v.tanda}</div></div>`;
+      const tLabel=v.tanda===0?'FREE':v.tanda===1?'T1':'T2';
+      const tClass=v.tanda===0?'t0':v.tanda===1?'t1':'t2';
+      const aprobadoHTML=v.aprobado
+        ?'<div class="approved-badge">✓ QR ENVIADO</div>'
+        :`<button class="approve-btn" onclick="aprobarVenta('${d.id}','${v.nombre}','${v.email}',${v.tanda},${v.qty},'${v.code}')">APROBAR + QR</button>`;
+      list.innerHTML+=`
+        <div class="sale-row">
+          <div>
+            <div class="sale-name">${v.nombre}</div>
+            <div class="sale-detail">${fecha} · ${v.qty} entrada${v.qty>1?'s':''} · ${v.tanda===0?'GRATIS':'$'+v.total} · ${v.email}</div>
+            <div class="sale-detail" style="color:rgba(255,255,255,.2);font-size:.6rem;margin-top:2px;">${v.code}</div>
+          </div>
+          <div class="sale-right">
+            <div class="sale-t ${tClass}">${tLabel}</div>
+            ${aprobadoHTML}
+          </div>
+        </div>`;
     });
   }
 
   // ── MODAL ──
   window.openModal=function(){
-    if(window._currentTanda===0){alert('Lo sentimos, las entradas están agotadas.');return;}
+    if(window._currentTanda===-1){alert('Lo sentimos, las entradas están agotadas.');return;}
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow='hidden';
-    updateModalLabel(); updatePriceDisplay();
+    updateModalLabel();updatePriceDisplay();
   };
   window.closeModal=function(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';};
   window.closeModalOutside=function(e){if(e.target===document.getElementById('modalOverlay'))closeModal();};
+  window.closeQR=function(){document.getElementById('qrOverlay').classList.remove('open');};
 
-  // ── SCROLL TO TICKETS ──
   window.scrollToTickets=function(){document.getElementById('tickets').scrollIntoView({behavior:'smooth'});};
-
-  // ── SHARE ──
   window.shareEvent=function(){
     const data={title:'La Jodita OK Vol. 2',text:'🎟 La Jodita OK Vol. 2 — Viernes 6 de Noviembre · Club Nacional, Colonia del Sacramento',url:window.location.href};
     if(navigator.share){navigator.share(data);}
-    else{navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Link copiado al portapapeles!'));}
+    else{navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Link copiado!'));}
   };
 
   // ── PARTICLES ──
@@ -797,12 +815,14 @@
   const revs=document.querySelectorAll('.reveal');
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});
   revs.forEach(r=>io.observe(r));
-
-  // ── TAGS ──
   document.querySelectorAll('.tag').forEach((t,i)=>t.style.setProperty('--dd',(i*.12)+'s'));
 
   // ── SPLASH ──
-  setTimeout(()=>{const s=document.getElementById('splash');s.style.pointerEvents='none';setTimeout(()=>s.style.display='none',700);},2600);
+  setTimeout(()=>{
+    const s=document.getElementById('splash');
+    s.classList.add('hide');
+    setTimeout(()=>s.style.display='none',700);
+  },2600);
 
   refreshUI();
 </script>
