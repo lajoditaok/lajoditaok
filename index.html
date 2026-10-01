@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jodita OK — La Jodita Vol. 2</title>
+<title>Jodita OK — Noche de Confesiones</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-  :root{--blue:#00BFFF;--blue-glow:rgba(0,191,255,0.25);--yellow:#FFD700;--yellow-glow:rgba(255,215,0,0.25);--green:#00ff88;--dark:#080808;--dark2:#0e0e0e;--white:#ffffff;--gray:rgba(255,255,255,0.45);--border:rgba(255,255,255,0.07);}
+  :root{
+    --red:#cc0000;--red2:#ff2222;--red-glow:rgba(204,0,0,0.35);
+    --red-light:rgba(255,60,60,0.15);--dark:#060606;--dark2:#100000;
+    --white:#ffffff;--gray:rgba(255,255,255,0.45);--border:rgba(255,255,255,0.07);
+    --border-red:rgba(204,0,0,0.2);
+  }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{background:var(--dark);color:var(--white);font-family:'Montserrat',sans-serif;overflow-x:hidden;}
@@ -15,100 +19,94 @@
   /* SPLASH */
   #splash{position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;transition:opacity .6s ease;}
   #splash.hide{opacity:0;pointer-events:none;}
-  .splash-ring{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(0,191,255,.15);animation:ringExp 2s ease-out .4s both;}
-  .splash-ring2{position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(0,191,255,.08);animation:ringExp 2s ease-out .7s both;}
-  .splash-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,15vw,7rem);letter-spacing:10px;color:#fff;animation:splashIn .8s cubic-bezier(.16,1,.3,1) .3s both;}
-  .splash-logo span{color:var(--blue);}
-  .splash-vol{font-size:.68rem;letter-spacing:8px;color:rgba(255,255,255,.2);text-transform:uppercase;animation:splashIn .6s ease .8s both;}
+  .splash-ring{position:absolute;width:320px;height:320px;border-radius:50%;border:1px solid rgba(204,0,0,0.2);animation:ringExp 2s ease-out .4s both;}
+  .splash-ring2{position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(204,0,0,0.1);animation:ringExp 2s ease-out .7s both;}
+  .splash-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,12vw,6rem);letter-spacing:8px;color:#fff;animation:splashIn .8s cubic-bezier(.16,1,.3,1) .3s both;text-align:center;line-height:1;}
+  .splash-logo span{color:var(--red2);}
+  .splash-vol{font-size:.65rem;letter-spacing:8px;color:rgba(255,255,255,.2);text-transform:uppercase;animation:splashIn .6s ease .8s both;}
   @keyframes splashIn{from{opacity:0;transform:scale(.85) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
   @keyframes ringExp{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
 
   #particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
-  .grid-overlay{position:fixed;inset:0;background-image:linear-gradient(rgba(0,191,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,191,255,.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0;}
+  .grid-overlay{position:fixed;inset:0;background-image:linear-gradient(rgba(204,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(204,0,0,0.04) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0;}
   section,header,footer{position:relative;z-index:1;}
 
   /* HERO */
-  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px 60px;overflow:hidden;}
-  .hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(0,191,255,.1) 0%,transparent 70%);border-radius:50%;animation:pulseG 4s ease-in-out infinite;pointer-events:none;}
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px 60px;overflow:hidden;position:relative;}
+  .hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(180,0,0,0.12) 0%,transparent 70%);border-radius:50%;animation:pulseG 4s ease-in-out infinite;pointer-events:none;}
   @keyframes pulseG{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.2);opacity:1;}}
-  .badge-ed{background:transparent;border:1px solid rgba(0,191,255,.4);color:var(--blue);font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:4px;padding:5px 16px;border-radius:2px;margin-bottom:22px;display:inline-block;animation:fadeUp .7s ease both;}
-  .logo-wrap{margin-bottom:16px;animation:fadeUp .7s .1s ease both;cursor:pointer;user-select:none;}
-  .logo-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,8vw,3.5rem);color:var(--white);letter-spacing:8px;}
-  .logo-text span{color:var(--blue);}
-  .hero-sub{font-size:.8rem;letter-spacing:5px;color:var(--gray);text-transform:uppercase;margin-bottom:8px;animation:fadeUp .7s .2s ease both;}
-  .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,16vw,8rem);color:var(--white);line-height:.9;letter-spacing:4px;animation:fadeUp .7s .3s ease both;}
-  .hero-title span{color:var(--yellow);}
-  .hero-date{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.1rem,4vw,1.8rem);letter-spacing:6px;color:var(--blue);margin-top:12px;animation:fadeUp .7s .4s ease both;text-shadow:0 0 20px var(--blue-glow);}
-  .hero-edition{font-size:.68rem;letter-spacing:4px;color:rgba(255,255,255,.25);margin-top:6px;text-transform:uppercase;animation:fadeUp .7s .45s ease both;}
-  .hero-btns{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .55s ease both;}
-  .cta-btn{display:inline-block;padding:16px 44px;background:var(--blue);color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;border:none;border-radius:3px;cursor:pointer;box-shadow:0 0 24px var(--blue-glow);transition:transform .2s,box-shadow .2s;font-weight:900;}
-  .cta-btn:hover{transform:translateY(-3px);box-shadow:0 0 40px var(--blue-glow);}
+
+  .badge-ed{background:transparent;border:1px solid rgba(204,0,0,0.5);color:var(--red2);font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:4px;padding:5px 16px;border-radius:2px;margin-bottom:22px;display:inline-block;animation:fadeUp .7s ease both;}
+
+  .logo-wrap{margin-bottom:10px;animation:fadeUp .7s .1s ease both;cursor:pointer;user-select:none;}
+  .logo-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,7vw,3rem);color:rgba(255,255,255,.7);letter-spacing:8px;}
+  .logo-text span{color:var(--red2);}
+
+  /* TÍTULO CON IMAGEN */
+  .hero-title-img{width:min(560px,90vw);margin:0 auto 10px;animation:fadeUp .7s .2s ease both;filter:drop-shadow(0 0 30px rgba(200,0,0,0.5));}
+
+  .hero-date{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.1rem,4vw,1.8rem);letter-spacing:6px;color:var(--red2);margin-top:10px;animation:fadeUp .7s .3s ease both;text-shadow:0 0 20px var(--red-glow);}
+  .hero-edition{font-size:.68rem;letter-spacing:4px;color:rgba(255,255,255,.25);margin-top:6px;text-transform:uppercase;animation:fadeUp .7s .35s ease both;}
+
+  .hero-btns{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .45s ease both;}
+  .cta-btn{display:inline-block;padding:16px 44px;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;border:none;border-radius:3px;cursor:pointer;box-shadow:0 0 24px var(--red-glow);transition:transform .2s,box-shadow .2s;font-weight:900;text-decoration:none;}
+  .cta-btn:hover{transform:translateY(-3px);box-shadow:0 0 50px var(--red-glow);}
   .share-btn{display:inline-flex;align-items:center;gap:8px;padding:16px 30px;background:transparent;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;border:1px solid rgba(255,255,255,.15);border-radius:3px;cursor:pointer;transition:all .2s;}
   .share-btn:hover{border-color:var(--white);}
-  .stars{position:absolute;font-size:1rem;animation:starF 4s ease-in-out infinite;pointer-events:none;opacity:.3;}
-  .star1{top:12%;left:6%;color:var(--blue);}
-  .star2{top:18%;right:8%;animation-delay:1s;color:var(--yellow);}
-  .star3{bottom:22%;left:4%;animation-delay:2s;color:var(--yellow);}
-  .star4{bottom:28%;right:6%;animation-delay:.5s;color:var(--blue);}
+
+  /* PHONE */
+  .phone-wrap{position:absolute;right:-20px;bottom:0;width:min(260px,40vw);animation:phoneFloat 4s ease-in-out infinite;opacity:.85;pointer-events:none;}
+  @keyframes phoneFloat{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-16px) rotate(-1deg);}}
+
+  .stars{position:absolute;font-size:1rem;animation:starF 4s ease-in-out infinite;pointer-events:none;opacity:.25;color:var(--red2);}
+  .star1{top:12%;left:6%;}
+  .star2{top:18%;right:26%;animation-delay:1s;}
+  .star3{bottom:22%;left:4%;animation-delay:2s;}
+  .star4{bottom:28%;right:28%;animation-delay:.5s;}
   @keyframes starF{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-12px) rotate(15deg);}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
 
-  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,191,255,.3),rgba(255,215,0,.2),transparent);margin:0 auto;}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(204,0,0,0.4),transparent);margin:0 auto;}
   .sec{padding:90px 20px;}
   .sec-inner{max-width:900px;margin:0 auto;}
-  .sec-label{font-size:.62rem;letter-spacing:6px;color:var(--blue);text-transform:uppercase;margin-bottom:10px;}
+  .sec-label{font-size:.62rem;letter-spacing:6px;color:var(--red2);text-transform:uppercase;margin-bottom:10px;}
   .sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.8rem);line-height:1;margin-bottom:40px;color:var(--white);}
 
-  /* TICKETS */
-  #tickets{background:rgba(0,191,255,.02);}
-  .ticket-stage{background:var(--dark2);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-  .ticket-header{background:rgba(0,191,255,.06);border-bottom:1px solid rgba(0,191,255,.1);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-  .ticket-event-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;}
-  .ticket-event-date{font-size:.68rem;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-top:2px;}
-  .ticket-badge{background:rgba(0,191,255,.1);border:1px solid rgba(0,191,255,.2);border-radius:2px;padding:4px 12px;font-size:.62rem;letter-spacing:3px;color:var(--blue);text-transform:uppercase;}
-  .tanda-row{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap;transition:background .2s;}
-  .tanda-row:last-child{border-bottom:none;}
-  .tanda-row.active:hover{background:rgba(0,191,255,.03);}
-  .tanda-left{display:flex;align-items:center;gap:16px;}
-  .tanda-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-  .tanda-dot.green{background:var(--green);box-shadow:0 0 8px var(--green);animation:dotP 1.5s ease-in-out infinite;}
-  .tanda-dot.gray{background:rgba(255,255,255,.15);}
-  .tanda-dot.sold{background:rgba(255,255,255,.1);}
-  @keyframes dotP{0%,100%{box-shadow:0 0 4px var(--green);}50%{box-shadow:0 0 14px var(--green);}}
-  .tanda-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;}
-  .tanda-row.locked .tanda-name,.tanda-row.soldout .tanda-name{color:rgba(255,255,255,.3);}
-  .tanda-row.soldout .tanda-name{text-decoration:line-through;}
-  .tanda-desc{font-size:.65rem;color:var(--gray);margin-top:2px;}
-  .tanda-row.locked .tanda-desc{color:rgba(255,255,255,.2);}
-  .tanda-right{display:flex;align-items:center;gap:20px;flex-shrink:0;}
-  .tanda-price-tag{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;}
-  .tanda-row.active .tanda-price-tag{color:var(--blue);}
-  .tanda-row.locked .tanda-price-tag,.tanda-row.soldout .tanda-price-tag{color:rgba(255,255,255,.15);}
-  .tanda-free-tag{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--green);}
-  .buy-tanda-btn{padding:10px 24px;background:var(--blue);color:#000;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;border:none;border-radius:3px;cursor:pointer;transition:transform .2s;white-space:nowrap;}
-  .buy-tanda-btn.free{background:var(--green);}
-  .buy-tanda-btn:hover{transform:translateY(-2px);}
-  .lock-tag{font-size:.62rem;letter-spacing:2px;color:rgba(255,255,255,.2);text-transform:uppercase;border:1px solid rgba(255,255,255,.08);border-radius:2px;padding:6px 12px;}
-  .sold-tag{font-size:.62rem;letter-spacing:2px;color:rgba(255,255,255,.2);text-transform:uppercase;border:1px solid rgba(255,255,255,.06);border-radius:2px;padding:6px 12px;}
-  .ticket-footer{padding:16px 28px;border-top:1px solid var(--border);}
-  .ticket-footer-text{font-size:.62rem;letter-spacing:1px;color:rgba(255,255,255,.2);}
+  /* COMPRA PASSLINE */
+  #tickets{background:rgba(204,0,0,.02);}
+  .passline-box{background:#0e0000;border:1px solid var(--border-red);border-radius:6px;overflow:hidden;}
+  .passline-header{background:rgba(204,0,0,.08);border-bottom:1px solid rgba(204,0,0,.12);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .passline-event-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;}
+  .passline-event-date{font-size:.68rem;letter-spacing:3px;color:var(--red2);text-transform:uppercase;margin-top:2px;}
+  .passline-badge{background:rgba(204,0,0,.1);border:1px solid rgba(204,0,0,.25);border-radius:2px;padding:4px 12px;font-size:.62rem;letter-spacing:3px;color:var(--red2);text-transform:uppercase;}
+  .passline-body{padding:40px 28px;text-align:center;}
+  .passline-icon{font-size:3rem;margin-bottom:16px;opacity:.6;}
+  .passline-txt{font-size:.82rem;color:var(--gray);letter-spacing:1px;line-height:1.7;margin-bottom:28px;}
+  .passline-btn{display:inline-block;padding:18px 50px;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:4px;border:none;border-radius:3px;cursor:pointer;box-shadow:0 0 30px var(--red-glow);transition:transform .2s,box-shadow .2s;text-decoration:none;}
+  .passline-btn:hover{transform:translateY(-3px);box-shadow:0 0 50px var(--red-glow);}
+  .passline-footer{padding:16px 28px;border-top:1px solid var(--border);text-align:center;}
+  .passline-footer-text{font-size:.62rem;letter-spacing:1px;color:rgba(255,255,255,.2);}
 
   /* DJs */
   .dj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
   .dj-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:28px 16px;text-align:center;transition:border-color .3s,transform .3s;}
-  .dj-card:hover{border-color:var(--blue);transform:translateY(-4px);}
+  .dj-card:hover{border-color:var(--red);transform:translateY(-4px);}
   .dj-logo{width:100%;max-width:130px;height:70px;object-fit:contain;filter:brightness(0) invert(1) opacity(.85);transition:filter .3s,transform .3s;display:block;margin:0 auto;}
-  .dj-card:hover .dj-logo{filter:brightness(0) invert(1) drop-shadow(0 0 8px var(--blue));transform:scale(1.05);}
+  .dj-card:hover .dj-logo{filter:brightness(0) invert(1) drop-shadow(0 0 8px var(--red2));transform:scale(1.05);}
   .dj-logo.mandita{filter:brightness(0) invert(1) opacity(.9);}
   .dj-logo.lucas{filter:none;mix-blend-mode:screen;opacity:.85;}
-  .dj-card:hover .dj-logo.lucas{mix-blend-mode:screen;opacity:1;filter:drop-shadow(0 0 8px var(--blue));}
+  .dj-card:hover .dj-logo.lucas{mix-blend-mode:screen;opacity:1;filter:drop-shadow(0 0 8px var(--red2));}
   .dj-guest{display:flex;flex-direction:column;align-items:center;justify-content:center;height:70px;gap:4px;}
   .dj-guest-q{font-size:1.6rem;opacity:.25;}
   .dj-guest-txt{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;color:rgba(255,255,255,.25);}
   .dj-soon{font-size:.5rem;letter-spacing:3px;color:rgba(255,255,255,.12);margin-top:2px;}
 
+  /* PHONE SECTION */
+  #confesiones{text-align:center;background:radial-gradient(ellipse at 50% 50%,rgba(180,0,0,.08) 0%,transparent 70%);}
+  .phone-display{max-width:300px;margin:0 auto;filter:drop-shadow(0 0 40px rgba(200,0,0,0.4));animation:phoneFloat 4s ease-in-out infinite;}
+
   /* REEL */
-  .reel-frame{max-width:360px;margin:0 auto;border-radius:6px;overflow:hidden;border:1px solid var(--border);background:var(--dark2);aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;}
+  .reel-frame{max-width:360px;margin:0 auto;border-radius:6px;overflow:hidden;border:1px solid var(--border);background:#0e0000;aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;}
   .reel-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;}
   .reel-placeholder .ri{font-size:2.5rem;opacity:.2;}
   .reel-placeholder p{font-size:.68rem;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;}
@@ -117,8 +115,8 @@
 
   /* GENRES */
   .genre-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
-  .tag{padding:7px 16px;border-radius:2px;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);background:transparent;transition:all .2s;animation:tagF var(--d,3s) ease-in-out infinite;animation-delay:var(--dd,0s);}
-  .tag:hover{background:var(--blue);color:#000;border-color:var(--blue);}
+  .tag{padding:7px 16px;border-radius:2px;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(204,0,0,.25);color:rgba(255,100,100,.7);background:transparent;transition:all .2s;animation:tagF var(--d,3s) ease-in-out infinite;animation-delay:var(--dd,0s);}
+  .tag:hover{background:var(--red);color:#fff;border-color:var(--red);}
   @keyframes tagF{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
   .no-tag{margin-top:28px;font-size:.6rem;letter-spacing:4px;color:rgba(255,255,255,.18);text-transform:uppercase;}
   .no-genres{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:10px;}
@@ -127,7 +125,7 @@
   /* INFO */
   .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
   .info-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:28px 16px;text-align:center;transition:border-color .3s;}
-  .info-card:hover{border-color:var(--yellow);}
+  .info-card:hover{border-color:var(--red);}
   .info-icon{font-size:1.8rem;margin-bottom:10px;}
   .info-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:5px;}
   .info-card p{font-size:.72rem;color:var(--gray);line-height:1.6;}
@@ -139,114 +137,11 @@
   /* REDES */
   .social-links{display:flex;justify-content:center;gap:16px;margin-top:30px;flex-wrap:wrap;}
   .social-link{display:flex;align-items:center;gap:10px;padding:14px 28px;border:1px solid var(--border);border-radius:3px;color:var(--white);text-decoration:none;font-size:.78rem;letter-spacing:3px;text-transform:uppercase;transition:all .2s;}
-  .social-link:hover{border-color:var(--blue);color:var(--blue);}
-  .social-icon{font-size:1.4rem;}
-
-  /* MODAL COMPRA */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
-  .modal-overlay.open{opacity:1;pointer-events:all;}
-  .modal{background:#0c0c0c;border:1px solid rgba(0,191,255,.25);border-radius:6px;padding:36px 28px;width:100%;max-width:440px;position:relative;transform:scale(.93) translateY(14px);transition:transform .3s;overflow-y:auto;max-height:90vh;}
-  .modal-overlay.open .modal{transform:scale(1) translateY(0);}
-  .modal-close{position:absolute;top:12px;right:16px;background:none;border:none;color:rgba(255,255,255,.3);font-size:1.5rem;cursor:pointer;}
-  .modal-close:hover{color:var(--white);}
-  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;margin-bottom:4px;}
-  .modal-tanda-lbl{font-size:.6rem;letter-spacing:4px;color:var(--blue);text-transform:uppercase;margin-bottom:22px;}
-  .form-group{margin-bottom:14px;}
-  .form-group label{display:block;font-size:.6rem;letter-spacing:3px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:5px;}
-  .form-group input,.form-group select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:11px 13px;color:#fff;font-family:'Montserrat',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
-  .form-group input:focus,.form-group select:focus{border-color:var(--blue);}
-  .form-group select option{background:#0c0c0c;}
-  .price-box{background:rgba(0,191,255,.05);border:1px solid rgba(0,191,255,.12);border-radius:4px;padding:14px;text-align:center;margin-bottom:18px;}
-  .price-box.free-box{background:rgba(0,255,136,.05);border-color:rgba(0,255,136,.2);}
-  .price-box .plbl{font-size:.58rem;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:2px;}
-  .price-box .pamt{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--blue);}
-  .price-box.free-box .pamt{color:var(--green);}
-  .account-box{background:rgba(255,255,255,.02);border-radius:4px;padding:13px;margin-bottom:18px;font-size:.72rem;line-height:1.9;color:rgba(255,255,255,.4);}
-  .account-box strong{color:var(--white);}
-  .wpp-btn{display:block;width:100%;padding:14px;background:#25D366;border:none;border-radius:3px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;cursor:pointer;transition:opacity .2s,transform .2s;}
-  .wpp-btn:hover{opacity:.88;transform:translateY(-2px);}
-  .modal-note{font-size:.6rem;text-align:center;color:rgba(255,255,255,.2);margin-top:12px;line-height:1.5;}
-
-  /* ADMIN */
-  .admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.96);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
-  .admin-overlay.open{opacity:1;pointer-events:all;}
-  .admin-modal{background:#0a0a0a;border:1px solid rgba(255,215,0,.25);border-radius:6px;padding:36px 28px;width:100%;max-width:380px;transform:scale(.92);transition:transform .3s;}
-  .admin-overlay.open .admin-modal{transform:scale(1);}
-  .admin-panel{background:#0a0a0a;border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:28px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;}
-  .admin-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:4px;color:var(--yellow);text-align:center;margin-bottom:4px;}
-  .admin-sub{font-size:.6rem;letter-spacing:3px;color:rgba(255,255,255,.2);text-align:center;margin-bottom:24px;text-transform:uppercase;}
-  .admin-modal .form-group input{border-color:rgba(255,215,0,.12);}
-  .admin-modal .form-group input:focus{border-color:var(--yellow);}
-  .admin-login-btn{display:block;width:100%;padding:13px;background:var(--yellow);border:none;border-radius:3px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;}
-  .admin-login-btn:hover{opacity:.85;}
-  .admin-error{font-size:.68rem;color:#ff4444;text-align:center;margin-top:10px;display:none;}
-  .admin-close{position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(255,255,255,.3);font-size:1.3rem;cursor:pointer;}
-  .admin-close:hover{color:var(--white);}
-
-  /* ADMIN TABS */
-  .admin-tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
-  .admin-tab{padding:8px 18px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:3px;color:rgba(255,255,255,.4);font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;cursor:pointer;transition:all .2s;}
-  .admin-tab.active{background:var(--yellow);border-color:var(--yellow);color:#000;}
-  .admin-tab-content{display:none;}
-  .admin-tab-content.active{display:block;}
-
-  /* STATS */
-  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-  .stat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:14px;text-align:center;}
-  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--yellow);}
-  .stat-lbl{font-size:.55rem;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-top:2px;}
-
-  /* SALES LIST */
-  .admin-list-ttl{font-size:.6rem;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin-bottom:10px;}
-  .sales-list{max-height:320px;overflow-y:auto;}
-  .sale-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:10px;}
-  .sale-row:last-child{border-bottom:none;}
-  .sale-name{color:var(--white);font-weight:600;font-size:.78rem;}
-  .sale-detail{color:var(--gray);font-size:.64rem;margin-top:1px;}
-  .sale-code{color:rgba(255,255,255,.2);font-size:.58rem;margin-top:2px;}
-  .sale-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
-  .sale-t{font-family:'Bebas Neue',sans-serif;font-size:.85rem;}
-  .sale-t.t0{color:var(--green);}
-  .sale-t.t1{color:var(--blue);}
-  .sale-t.t2{color:var(--yellow);}
-  .approve-btn{padding:5px 10px;background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.3);border-radius:2px;color:var(--green);font-size:.58rem;letter-spacing:2px;cursor:pointer;font-family:'Bebas Neue',sans-serif;transition:all .2s;white-space:nowrap;}
-  .approve-btn:hover{background:rgba(0,255,136,.25);}
-  .approved-badge{padding:5px 10px;background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.1);border-radius:2px;color:rgba(0,255,136,.4);font-size:.58rem;letter-spacing:2px;font-family:'Bebas Neue',sans-serif;}
-
-  /* RESET SECTION */
-  .reset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;}
-  .reset-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:18px;text-align:center;}
-  .reset-card-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;margin-bottom:4px;}
-  .reset-card-count{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--yellow);margin-bottom:12px;}
-  .reset-btn{display:block;width:100%;padding:8px;background:transparent;border:1px solid rgba(255,80,80,.3);border-radius:3px;color:rgba(255,80,80,.7);font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;cursor:pointer;transition:all .2s;}
-  .reset-btn:hover{background:rgba(255,80,80,.1);border-color:rgba(255,80,80,.6);color:#ff5050;}
-
-  /* TANDAS CONFIG */
-  .tanda-config-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
-  .tanda-config-row{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:16px;}
-  .tanda-config-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-  .tanda-config-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;}
-  .tanda-config-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-  .tanda-config-inputs input{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:8px 10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:.82rem;outline:none;width:100%;}
-  .tanda-config-inputs input:focus{border-color:var(--yellow);}
-  .tanda-config-lbl{font-size:.55rem;letter-spacing:2px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:3px;}
-  .save-tanda-btn{margin-top:10px;padding:7px 16px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:3px;color:var(--yellow);font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;cursor:pointer;transition:all .2s;}
-  .save-tanda-btn:hover{background:rgba(255,215,0,.2);}
-  .del-tanda-btn{padding:7px 14px;background:transparent;border:1px solid rgba(255,80,80,.25);border-radius:3px;color:rgba(255,80,80,.6);font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:2px;cursor:pointer;transition:all .2s;}
-  .del-tanda-btn:hover{border-color:rgba(255,80,80,.5);color:#ff5050;}
-  .add-tanda-box{background:rgba(255,215,0,.03);border:1px dashed rgba(255,215,0,.2);border-radius:4px;padding:18px;}
-  .add-tanda-title{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;color:rgba(255,215,0,.6);margin-bottom:14px;}
-  .add-tanda-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
-  .add-tanda-inputs input{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:3px;padding:8px 10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:.82rem;outline:none;width:100%;}
-  .add-tanda-inputs input:focus{border-color:var(--yellow);}
-  .add-tanda-btn{padding:9px 20px;background:var(--yellow);border:none;border-radius:3px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;cursor:pointer;}
-
-  .logout-btn{display:block;width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.08);border-radius:3px;color:rgba(255,255,255,.25);font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;cursor:pointer;margin-top:20px;transition:all .2s;}
-  .logout-btn:hover{border-color:rgba(255,255,255,.25);color:var(--white);}
+  .social-link:hover{border-color:var(--red);color:var(--red2);}
 
   footer{text-align:center;padding:50px 20px;border-top:1px solid var(--border);margin-top:40px;}
   .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:6px;}
-  .footer-logo span{color:var(--blue);}
+  .footer-logo span{color:var(--red2);}
   .footer-sub{font-size:.58rem;letter-spacing:4px;color:rgba(255,255,255,.18);margin-top:6px;text-transform:uppercase;}
 
   .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
@@ -254,61 +149,79 @@
 
   @media(max-width:640px){
     .dj-grid,.info-grid{grid-template-columns:1fr;}
-    .stat-grid{grid-template-columns:1fr 1fr;}
-    .tanda-config-inputs,.add-tanda-inputs{grid-template-columns:1fr;}
-    .tanda-row{flex-direction:column;align-items:flex-start;}
-    .tanda-right{width:100%;justify-content:space-between;}
-    .modal,.admin-modal,.admin-panel{padding:24px 16px;}
     .hero-btns{flex-direction:column;align-items:center;}
-    .reset-grid{grid-template-columns:1fr 1fr;}
+    .phone-wrap{display:none;}
+    .passline-body{padding:30px 20px;}
+    .sec{padding:60px 20px;}
   }
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
 
+<!-- SPLASH -->
 <div id="splash">
   <div class="splash-ring2"></div><div class="splash-ring"></div>
-  <div class="splash-logo">JODITA <span>OK</span></div>
-  <div class="splash-vol">Vol. 2 · 6 de Noviembre</div>
+  <div class="splash-logo">NOCHE DE<br><span>CONFESIONES</span></div>
+  <div class="splash-vol">Jodita OK · 6 de Noviembre</div>
 </div>
 
 <canvas id="particles"></canvas>
 <div class="grid-overlay"></div>
 
+<!-- HERO -->
 <header id="hero">
   <div class="hero-glow"></div>
   <span class="stars star1">✦</span><span class="stars star2">★</span>
   <span class="stars star3">✦</span><span class="stars star4">★</span>
+
   <div class="badge-ed">SEGUNDA EDICIÓN · +18 AÑOS</div>
-  <div class="logo-wrap" id="logoWrap"><div class="logo-text">JODITA <span>OK</span></div></div>
-  <div class="hero-sub">Presenta</div>
-  <div class="hero-title">LA <span>JODITA</span><br>VOL. 2</div>
+
+  <div class="logo-wrap" id="logoWrap">
+    <div class="logo-text">JODITA <span>OK</span></div>
+  </div>
+
+  <!-- Título con imagen -->
+  <img class="hero-title-img" src="Noche_de_confesiones_en_3D__1_.png" alt="Noche de Confesiones" />
+
   <div class="hero-date">VIERNES 6 DE NOVIEMBRE</div>
   <div class="hero-edition">Club Nacional · Colonia del Sacramento</div>
+
   <div class="hero-btns">
     <button class="cta-btn" onclick="scrollToTickets()">🎟 COMPRAR ENTRADA</button>
     <button class="share-btn" onclick="shareEvent()">↗ COMPARTIR</button>
   </div>
+
+  <!-- Teléfono flotante -->
+  <img class="phone-wrap" src="IMG_9461.PNG" alt="Noche de Confesiones" />
 </header>
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
+<!-- COMPRA -->
 <section id="tickets" class="sec">
   <div class="sec-inner">
     <div class="sec-label reveal">Entradas online</div>
     <div class="sec-title reveal">COMPRÁ TU ENTRADA</div>
-    <div class="ticket-stage reveal">
-      <div class="ticket-header">
+    <div class="passline-box reveal">
+      <div class="passline-header">
         <div>
-          <div class="ticket-event-name">LA JODITA OK — VOL. 2</div>
-          <div class="ticket-event-date">Viernes 6 de Noviembre · Club Nacional, Colonia del Sacramento</div>
+          <div class="passline-event-name">NOCHE DE CONFESIONES</div>
+          <div class="passline-event-date">Viernes 6 de Noviembre · Club Nacional, Colonia del Sacramento</div>
         </div>
-        <div class="ticket-badge">VENTA ONLINE</div>
+        <div class="passline-badge">VÍA PASSLINE</div>
       </div>
-      <div id="tandaList"></div>
-      <div class="ticket-footer">
-        <div class="ticket-footer-text">ℹ️ &nbsp;Enviá el comprobante por WhatsApp para confirmar · Retirás en puerta · Recibirás tu código por email al ser aprobado</div>
+      <div class="passline-body">
+        <div class="passline-icon">🎟️</div>
+        <div class="passline-txt">
+          Las entradas se venden exclusivamente a través de Passline.<br>
+          Comprá online y retirás en puerta el día del evento.
+        </div>
+        <!-- PASSLINE LINK: reemplazá el # con tu link de Passline cuando lo tengas -->
+        <a class="passline-btn" href="#" target="_blank" id="passlineBtn">COMPRAR EN PASSLINE</a>
+      </div>
+      <div class="passline-footer">
+        <div class="passline-footer-text">ℹ️ &nbsp;Venta exclusivamente online · Retiro en puerta · Evento +18 años</div>
       </div>
     </div>
   </div>
@@ -316,6 +229,7 @@
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
+<!-- DJs -->
 <section class="sec" id="djs">
   <div class="sec-inner" style="text-align:center;">
     <div class="sec-label reveal">Line-up</div>
@@ -323,18 +237,38 @@
     <div class="dj-grid">
       <div class="dj-card reveal"><img class="dj-logo mandita" src="channels4_profile.jpg" alt="DJ Mandita OK"/></div>
       <div class="dj-card reveal"><img class="dj-logo lucas" src="LOGO_LUCAS_CABALLERO.png" alt="DJ Lucas Caballero"/></div>
-      <div class="dj-card reveal"><div class="dj-guest"><div class="dj-guest-q">?</div><div class="dj-guest-txt">DJ INVITADA</div><div class="dj-soon">PRÓXIMAMENTE</div></div></div>
+      <div class="dj-card reveal">
+        <div class="dj-guest">
+          <div class="dj-guest-q">?</div>
+          <div class="dj-guest-txt">DJ INVITADA</div>
+          <div class="dj-soon">PRÓXIMAMENTE</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
-<section class="sec" id="reel" style="text-align:center;">
+<!-- TELÉFONO / CONFESIONES -->
+<section class="sec" id="confesiones">
+  <div class="sec-inner" style="text-align:center;">
+    <div class="sec-label reveal">La noche</div>
+    <div class="sec-title reveal">NOCHE DE CONFESIONES</div>
+    <img class="phone-display reveal" src="IMG_9461.PNG" alt="Confesiones" />
+  </div>
+</section>
+
+<div class="divider" style="max-width:860px;margin:0 auto;"></div>
+
+<!-- REEL -->
+<section class="sec" style="text-align:center;">
   <div class="sec-inner">
     <div class="sec-label reveal">Primera Edición</div>
     <div class="sec-title reveal">EL AFTER</div>
     <div class="reel-frame reveal">
+      <!-- Cuando tengas el reel reemplazá esto por:
+           <iframe src="https://www.instagram.com/reel/TU_ID/embed/" allowfullscreen></iframe> -->
       <div class="reel-placeholder"><div class="ri">🎬</div><p>Reel próximamente</p></div>
     </div>
     <a href="https://www.instagram.com/lajoditaok_/" target="_blank" class="ig-follow reveal"><span>📸</span> @lajoditaok_</a>
@@ -343,7 +277,8 @@
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
-<section class="sec" id="genres" style="text-align:center;">
+<!-- GÉNEROS -->
+<section class="sec" style="text-align:center;">
   <div class="sec-inner">
     <div class="sec-label reveal">Música</div>
     <div class="sec-title reveal">LO QUE VA A SONAR</div>
@@ -364,7 +299,8 @@
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
-<section class="sec" id="info" style="text-align:center;">
+<!-- INFO -->
+<section class="sec" style="text-align:center;">
   <div class="sec-inner">
     <div class="sec-label reveal">El evento</div>
     <div class="sec-title reveal">TU NOCHE</div>
@@ -378,7 +314,8 @@
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
-<section class="sec" id="mapa">
+<!-- MAPA -->
+<section class="sec">
   <div class="sec-inner">
     <div class="sec-label reveal" style="text-align:center;">Ubicación</div>
     <div class="sec-title reveal" style="text-align:center;">CÓMO LLEGAR</div>
@@ -391,481 +328,70 @@
 
 <div class="divider" style="max-width:860px;margin:0 auto;"></div>
 
-<section class="sec" id="redes">
+<!-- REDES -->
+<section class="sec">
   <div class="sec-inner" style="text-align:center;">
     <div class="sec-label reveal">Seguinos</div>
     <div class="sec-title reveal">REDES</div>
     <div class="social-links reveal">
-      <a href="https://www.instagram.com/lajoditaok_/" target="_blank" class="social-link"><span class="social-icon">📸</span><span>@lajoditaok_</span></a>
+      <a href="https://www.instagram.com/lajoditaok_/" target="_blank" class="social-link"><span>📸</span><span>@lajoditaok_</span></a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="footer-logo">JODITA <span>OK</span></div>
-  <div class="footer-sub">La Jodita Vol. 2 · 6 de Noviembre · Colonia del Sacramento</div>
+  <div class="footer-sub">Noche de Confesiones · 6 de Noviembre · Colonia del Sacramento</div>
 </footer>
 
-<!-- MODAL COMPRA -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="modal-title">COMPRÁ TU ENTRADA</div>
-    <div class="modal-tanda-lbl" id="modalTandaLbl">CARGANDO...</div>
-    <div class="form-group"><label>Nombre</label><input type="text" id="firstName" placeholder="Tu nombre"/></div>
-    <div class="form-group"><label>Apellido</label><input type="text" id="lastName" placeholder="Tu apellido"/></div>
-    <div class="form-group"><label>Email (para recibir tu código)</label><input type="email" id="userEmail" placeholder="tu@email.com"/></div>
-    <div class="form-group">
-      <label>¿Cuántas entradas?</label>
-      <select id="qty" onchange="updatePrice()">
-        <option value="1">1 entrada</option><option value="2">2 entradas</option>
-        <option value="3">3 entradas</option><option value="4">4 entradas</option><option value="5">5 entradas</option>
-      </select>
-    </div>
-    <div class="price-box" id="priceBox">
-      <div class="plbl">Total a transferir</div>
-      <div class="pamt" id="totalPrice">$250</div>
-    </div>
-    <div class="account-box" id="accountBox">
-      <strong>Cuenta PREX</strong><br>Número: <strong>1511259</strong><br>Titular: <strong>Amanda Pérez</strong><br><br>
-      <span style="font-size:.66rem;">Transferí el monto y confirmá por WhatsApp con el comprobante.</span>
-    </div>
-    <button class="wpp-btn" onclick="confirmarCompra()">💬 CONFIRMAR POR WHATSAPP</button>
-    <p class="modal-note">Recibirás tu código por email una vez aprobado · Retirás en puerta el día del evento</p>
-  </div>
-</div>
-
-<!-- ADMIN -->
-<div class="admin-overlay" id="adminOverlay" onclick="closeAdminOutside(event)">
-  <div id="adminLoginBox" class="admin-modal">
-    <div class="admin-title">PANEL ADMIN</div>
-    <div class="admin-sub">Acceso restringido</div>
-    <div class="form-group"><label>Usuario</label><input type="text" id="adminUser" placeholder="Usuario" autocomplete="off"/></div>
-    <div class="form-group"><label>Contraseña</label><input type="password" id="adminPass" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
-    <button class="admin-login-btn" onclick="doAdminLogin()">INGRESAR</button>
-    <div class="admin-error" id="adminError">Usuario o contraseña incorrectos</div>
-  </div>
-
-  <div id="adminPanelBox" class="admin-panel" style="display:none;position:relative;">
-    <button class="admin-close" onclick="closeAdmin()">×</button>
-    <div class="admin-title" style="text-align:left;margin-bottom:16px;">📊 JODITA OK — ADMIN</div>
-
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="switchTab('ventas')">VENTAS</button>
-      <button class="admin-tab" onclick="switchTab('reset')">RESET TANDAS</button>
-      <button class="admin-tab" onclick="switchTab('config')">CONFIGURAR TANDAS</button>
-    </div>
-
-    <!-- TAB VENTAS -->
-    <div id="tab-ventas" class="admin-tab-content active">
-      <div class="stat-grid" id="statGrid"></div>
-      <div class="admin-list-ttl">Compradores — hacé click en APROBAR para enviar el código por email</div>
-      <div class="sales-list" id="salesList"></div>
-    </div>
-
-    <!-- TAB RESET -->
-    <div id="tab-reset" class="admin-tab-content">
-      <div style="font-size:.68rem;color:var(--gray);margin-bottom:16px;letter-spacing:1px;">Resetear una tanda pone su contador en 0. Los registros de ventas no se borran.</div>
-      <div class="reset-grid" id="resetGrid"></div>
-    </div>
-
-    <!-- TAB CONFIG -->
-    <div id="tab-config" class="admin-tab-content">
-      <div style="font-size:.68rem;color:var(--gray);margin-bottom:16px;letter-spacing:1px;">Modificá el nombre, precio y cantidad máxima de cada tanda, o agregá nuevas.</div>
-      <div class="tanda-config-list" id="tandaConfigList"></div>
-      <div class="add-tanda-box">
-        <div class="add-tanda-title">+ AGREGAR NUEVA TANDA</div>
-        <div class="add-tanda-inputs">
-          <div><div class="tanda-config-lbl">Nombre</div><input id="newTandaNombre" placeholder="ej: Tercera Tanda"/></div>
-          <div><div class="tanda-config-lbl">Precio ($0 = gratis)</div><input id="newTandaPrecio" type="number" placeholder="350" min="0"/></div>
-          <div><div class="tanda-config-lbl">Máximo de entradas</div><input id="newTandaMax" type="number" placeholder="30" min="1"/></div>
-        </div>
-        <button class="add-tanda-btn" onclick="addTanda()">AGREGAR TANDA</button>
-      </div>
-    </div>
-
-    <button class="logout-btn" onclick="adminLogout()">CERRAR SESIÓN</button>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, orderBy, query, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const app = initializeApp({
-    apiKey:"AIzaSyB8Ubsq0GEjMZmT6as1mYDF-fEFfu0c51U",
-    authDomain:"lajoditaok.firebaseapp.com",
-    projectId:"lajoditaok",
-    storageBucket:"lajoditaok.firebasestorage.app",
-    messagingSenderId:"292261003770",
-    appId:"1:292261003770:web:1f7453f78ae60044d4a443"
-  });
-  const db = getFirestore(app);
-  emailjs.init("-E0E-rOsJcc_YseI3");
-
-  window._currentTandaIdx = -1;
-  window._tandas = [];
-
-  async function sha256(msg){
-    const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
-  const H_USER="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
-  const H_PASS_P=sha256("LaJodit4.OK");
-
-  function genCode(){return 'JOK-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();}
-
-  // ── CARGAR TANDAS CONFIG ──
-  async function loadTandas(){
-    const snap=await getDoc(doc(db,"config","tandas_v2"));
-    if(!snap.exists()){
-      const defaultTandas=[
-        {id:'free',nombre:'TANDA FREE',precio:0,max:10,vendidas:0},
-        {id:'t1',nombre:'PRIMERA TANDA',precio:250,max:20,vendidas:0},
-        {id:'t2',nombre:'SEGUNDA TANDA',precio:300,max:30,vendidas:0}
-      ];
-      await setDoc(doc(db,"config","tandas_v2"),{tandas:defaultTandas});
-      return defaultTandas;
-    }
-    return snap.data().tandas||[];
-  }
-
-  async function saveTandas(tandas){
-    await setDoc(doc(db,"config","tandas_v2"),{tandas});
-  }
-
-  async function refreshUI(){
-    const tandas=await loadTandas();
-    window._tandas=tandas;
-    // Determinar tanda activa (primera no agotada)
-    let activeIdx=-1;
-    for(let i=0;i<tandas.length;i++){
-      if((tandas[i].vendidas||0)<tandas[i].max){activeIdx=i;break;}
-    }
-    window._currentTandaIdx=activeIdx;
-    renderTandas(tandas,activeIdx);
-    updateModalLabel();
-    updatePriceDisplay();
-  }
-
-  function renderTandas(tandas,activeIdx){
-    const list=document.getElementById('tandaList');
-    list.innerHTML='';
-    tandas.forEach((t,i)=>{
-      const vendidas=t.vendidas||0;
-      const isSold=vendidas>=t.max;
-      const isActive=i===activeIdx;
-      const isLocked=i>activeIdx&&activeIdx!==-1||(!isActive&&!isSold&&i>activeIdx);
-      const locked=activeIdx===-1?false:i>activeIdx&&!isSold;
-      const esGratis=t.precio===0;
-      const dotClass=isSold?'sold':isActive?'green':'gray';
-      const rowClass=isSold?'soldout':locked?'locked':'active';
-      const desc=isSold?'Agotada':locked?`Se habilita al agotar la tanda anterior`:isActive?`Disponible ahora`:'Disponible';
-      const priceHTML=esGratis?`<div class="${isSold?'tanda-price-tag':'tanda-free-tag'}">GRATIS</div>`:`<div class="tanda-price-tag">$${t.precio}</div>`;
-      const btnHTML=isSold?'<div class="sold-tag">AGOTADA</div>':locked?'<div class="lock-tag">🔒 BLOQUEADA</div>':`<button class="buy-tanda-btn ${esGratis?'free':''}" onclick="openModal()">COMPRAR</button>`;
-      list.innerHTML+=`
-        <div class="tanda-row ${rowClass}">
-          <div class="tanda-left">
-            <div class="tanda-dot ${dotClass}"></div>
-            <div><div class="tanda-name">${t.nombre}</div><div class="tanda-desc">${desc}</div></div>
-          </div>
-          <div class="tanda-right">${priceHTML}${btnHTML}</div>
-        </div>`;
-    });
-  }
-
-  function updateModalLabel(){
-    const el=document.getElementById('modalTandaLbl');
-    const pb=document.getElementById('priceBox');
-    const ab=document.getElementById('accountBox');
-    if(!el)return;
-    const idx=window._currentTandaIdx;
-    if(idx===-1){el.textContent='ENTRADAS AGOTADAS';return;}
-    const t=window._tandas[idx];
-    if(t.precio===0){
-      el.textContent=`${t.nombre} · GRATIS`;
-      el.style.color='var(--green)';
-      pb.classList.add('free-box');
-      if(ab)ab.style.display='none';
-    }else{
-      el.textContent=`${t.nombre} · $${t.precio} POR ENTRADA`;
-      el.style.color='var(--blue)';
-      pb.classList.remove('free-box');
-      if(ab)ab.style.display='block';
-    }
-  }
-
-  function updatePriceDisplay(){
-    const qty=parseInt(document.getElementById('qty')?.value||1);
-    const el=document.getElementById('totalPrice');
-    if(!el)return;
-    const idx=window._currentTandaIdx;
-    if(idx===-1){el.textContent='AGOTADO';return;}
-    const t=window._tandas[idx];
-    if(t.precio===0){el.textContent='GRATIS';el.style.color='var(--green)';}
-    else{el.textContent='$'+(qty*t.precio);el.style.color='var(--blue)';}
-  }
-  window.updatePrice=updatePriceDisplay;
-
-  window.confirmarCompra=async function(){
-    const idx=window._currentTandaIdx;
-    if(idx===-1){alert('Lo sentimos, las entradas están agotadas.');return;}
-    const first=document.getElementById('firstName').value.trim();
-    const last=document.getElementById('lastName').value.trim();
-    const email=document.getElementById('userEmail').value.trim();
-    const qty=parseInt(document.getElementById('qty').value);
-    if(!first||!last){alert('Por favor ingresá tu nombre y apellido.');return;}
-    if(!email||!email.includes('@')){alert('Por favor ingresá un email válido para recibir tu código.');return;}
-    const t=window._tandas[idx];
-    const nombre=first+' '+last;
-    const code=genCode();
-    try{
-      const tandas=[...window._tandas];
-      tandas[idx]={...tandas[idx],vendidas:(tandas[idx].vendidas||0)+qty};
-      await saveTandas(tandas);
-      await addDoc(collection(db,"ventas_v2"),{
-        nombre,email,qty,tandaIdx:idx,tandaNombre:t.nombre,
-        precio:t.precio,total:qty*t.precio,code,aprobado:false,
-        fecha:new Date().toISOString()
-      });
-      await refreshUI();
-    }catch(e){console.error(e);}
-    const esGratis=t.precio===0;
-    const msg=encodeURIComponent(
-      `Hola! Quiero ${esGratis?'reservar':'comprar'} ${qty} entrada${qty>1?'s':''} para La Jodita OK Vol. 2 (6/11).\n\n`+
-      `Nombre: ${nombre}\nEmail: ${email}\nCantidad: ${qty} entrada${qty>1?'s':''}\n`+
-      `Tanda: ${t.nombre}${esGratis?' (GRATIS)':' ($'+t.precio+')'}\n`+
-      `Total: ${esGratis?'GRATIS':'$'+(qty*t.precio)}\nCódigo: ${code}\n\n`+
-      (esGratis?'Es tanda FREE, aguardo confirmación.':'Ya realicé la transferencia a PREX 1511259 (Amanda Pérez). Te adjunto el comprobante.')
-    );
-    window.open(`https://wa.me/59898543384?text=${msg}`,'_blank');
-    closeModal();
-  };
-
-  // ── ADMIN ──
-  let logoTaps=0,logoTimer=null;
-  document.getElementById('logoWrap').addEventListener('click',()=>{
-    logoTaps++;clearTimeout(logoTimer);
-    logoTimer=setTimeout(()=>{logoTaps=0;},1500);
-    if(logoTaps>=5){logoTaps=0;openAdmin();}
-  });
-  window.openAdmin=function(){
-    document.getElementById('adminOverlay').classList.add('open');
-    document.getElementById('adminLoginBox').style.display='block';
-    document.getElementById('adminPanelBox').style.display='none';
-    document.getElementById('adminUser').value='';
-    document.getElementById('adminPass').value='';
-    document.getElementById('adminError').style.display='none';
-  };
-  window.closeAdmin=function(){document.getElementById('adminOverlay').classList.remove('open');};
-  window.closeAdminOutside=function(e){if(e.target===document.getElementById('adminOverlay'))closeAdmin();};
-  window.doAdminLogin=async function(){
-    const user=document.getElementById('adminUser').value.trim();
-    const pass=document.getElementById('adminPass').value;
-    const[hU,hP,hReal]=await Promise.all([sha256(user),sha256(pass),H_PASS_P]);
-    if(hU===H_USER&&hP===hReal){
-      document.getElementById('adminLoginBox').style.display='none';
-      document.getElementById('adminPanelBox').style.display='block';
-      loadAdminPanel();
-    }else{document.getElementById('adminError').style.display='block';}
-  };
-  window.adminLogout=function(){
-    document.getElementById('adminLoginBox').style.display='block';
-    document.getElementById('adminPanelBox').style.display='none';
-  };
-
-  window.switchTab=function(tab){
-    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.admin-tab-content').forEach(t=>t.classList.remove('active'));
-    document.getElementById('tab-'+tab).classList.add('active');
-    event.target.classList.add('active');
-    if(tab==='config')loadConfigTab();
-    if(tab==='reset')loadResetTab();
-  };
-
-  async function loadAdminPanel(){
-    const tandas=await loadTandas();
-    window._tandas=tandas;
-    // Stats
-    let totalVendidas=0;
-    const statGrid=document.getElementById('statGrid');
-    statGrid.innerHTML='';
-    tandas.forEach(t=>{
-      const v=t.vendidas||0;
-      totalVendidas+=v;
-      statGrid.innerHTML+=`<div class="stat-card"><div class="stat-num">${v}/${t.max}</div><div class="stat-lbl">${t.nombre}</div></div>`;
-    });
-    statGrid.innerHTML=`<div class="stat-card"><div class="stat-num">${totalVendidas}</div><div class="stat-lbl">Total vendidas</div></div>`+statGrid.innerHTML;
-
-    // Sales list
-    const q=query(collection(db,"ventas_v2"),orderBy("fecha","desc"));
-    const snap=await getDocs(q);
-    const list=document.getElementById('salesList');
-    list.innerHTML='';
-    if(snap.empty){list.innerHTML='<div style="font-size:.72rem;color:rgba(255,255,255,.2);padding:10px 0;">Sin ventas aún.</div>';return;}
-    snap.forEach(d=>{
-      const v=d.data();
-      const fecha=new Date(v.fecha).toLocaleDateString('es-UY',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-      const esGratis=v.precio===0;
-      const aprobadoHTML=v.aprobado
-        ?'<div class="approved-badge">✓ CÓDIGO ENVIADO</div>'
-        :`<button class="approve-btn" onclick="aprobarVenta('${d.id}','${v.nombre}','${v.email}',${v.qty},'${v.tandaNombre}','${v.code}')">APROBAR + EMAIL</button>`;
-      list.innerHTML+=`
-        <div class="sale-row">
-          <div>
-            <div class="sale-name">${v.nombre}</div>
-            <div class="sale-detail">${fecha} · ${v.qty} entrada${v.qty>1?'s':''} · ${esGratis?'GRATIS':'$'+v.total} · ${v.email}</div>
-            <div class="sale-code">${v.code}</div>
-          </div>
-          <div class="sale-right">
-            <div class="sale-t" style="color:${esGratis?'var(--green)':'var(--blue)'}">${v.tandaNombre}</div>
-            ${aprobadoHTML}
-          </div>
-        </div>`;
-    });
-  }
-
-  function loadResetTab(){
-    const tandas=window._tandas;
-    const grid=document.getElementById('resetGrid');
-    grid.innerHTML='';
-    tandas.forEach((t,i)=>{
-      grid.innerHTML+=`
-        <div class="reset-card">
-          <div class="reset-card-name">${t.nombre}</div>
-          <div class="reset-card-count">${t.vendidas||0}</div>
-          <button class="reset-btn" onclick="resetTanda(${i})">RESETEAR</button>
-        </div>`;
-    });
-  }
-
-  window.resetTanda=async function(idx){
-    const t=window._tandas[idx];
-    if(!confirm(`¿Resetear "${t.nombre}"? El contador de vendidas vuelve a 0.`))return;
-    const tandas=[...window._tandas];
-    tandas[idx]={...tandas[idx],vendidas:0};
-    await saveTandas(tandas);
-    window._tandas=tandas;
-    await refreshUI();
-    loadResetTab();
-    alert(`✅ ${t.nombre} reseteada a 0.`);
-  };
-
-  function loadConfigTab(){
-    const tandas=window._tandas;
-    const list=document.getElementById('tandaConfigList');
-    list.innerHTML='';
-    tandas.forEach((t,i)=>{
-      list.innerHTML+=`
-        <div class="tanda-config-row">
-          <div class="tanda-config-header">
-            <div class="tanda-config-name">${t.nombre}</div>
-            <button class="del-tanda-btn" onclick="deleteTanda(${i})">ELIMINAR</button>
-          </div>
-          <div class="tanda-config-inputs">
-            <div><div class="tanda-config-lbl">Nombre</div><input id="cfg-nombre-${i}" value="${t.nombre}"/></div>
-            <div><div class="tanda-config-lbl">Precio ($0 = gratis)</div><input id="cfg-precio-${i}" type="number" value="${t.precio}" min="0"/></div>
-            <div><div class="tanda-config-lbl">Máximo entradas</div><input id="cfg-max-${i}" type="number" value="${t.max}" min="1"/></div>
-          </div>
-          <button class="save-tanda-btn" onclick="saveTandaConfig(${i})">GUARDAR CAMBIOS</button>
-        </div>`;
-    });
-  }
-
-  window.saveTandaConfig=async function(idx){
-    const nombre=document.getElementById(`cfg-nombre-${idx}`).value.trim();
-    const precio=parseInt(document.getElementById(`cfg-precio-${idx}`).value)||0;
-    const max=parseInt(document.getElementById(`cfg-max-${idx}`).value)||1;
-    if(!nombre){alert('El nombre no puede estar vacío.');return;}
-    const tandas=[...window._tandas];
-    tandas[idx]={...tandas[idx],nombre,precio,max};
-    await saveTandas(tandas);
-    window._tandas=tandas;
-    await refreshUI();
-    loadConfigTab();
-    alert(`✅ Tanda actualizada.`);
-  };
-
-  window.deleteTanda=async function(idx){
-    const t=window._tandas[idx];
-    if(!confirm(`¿Eliminar "${t.nombre}"? Esta acción no se puede deshacer.`))return;
-    const tandas=window._tandas.filter((_,i)=>i!==idx);
-    await saveTandas(tandas);
-    window._tandas=tandas;
-    await refreshUI();
-    loadConfigTab();
-  };
-
-  window.addTanda=async function(){
-    const nombre=document.getElementById('newTandaNombre').value.trim();
-    const precio=parseInt(document.getElementById('newTandaPrecio').value)||0;
-    const max=parseInt(document.getElementById('newTandaMax').value)||1;
-    if(!nombre){alert('Ingresá un nombre para la tanda.');return;}
-    const tandas=[...window._tandas,{id:'t'+Date.now(),nombre,precio,max,vendidas:0}];
-    await saveTandas(tandas);
-    window._tandas=tandas;
-    document.getElementById('newTandaNombre').value='';
-    document.getElementById('newTandaPrecio').value='';
-    document.getElementById('newTandaMax').value='';
-    await refreshUI();
-    loadConfigTab();
-    alert(`✅ Tanda "${nombre}" agregada.`);
-  };
-
-  window.aprobarVenta=async function(docId,nombre,email,qty,tandaNombre,code){
-    try{
-      await emailjs.send('service_ab199co','template_vfg13mh',{
-        to_email:email,nombre,tanda:tandaNombre,qty,code,
-        evento:'La Jodita OK Vol. 2',fecha:'Viernes 6 de Noviembre',
-        lugar:'Club Nacional, Colonia del Sacramento'
-      });
-      const q2=query(collection(db,"ventas_v2"));
-      const snap=await getDocs(q2);
-      snap.forEach(async d=>{if(d.id===docId)await updateDoc(doc(db,"ventas_v2",d.id),{aprobado:true});});
-      alert(`✅ Código enviado a ${email}`);
-      loadAdminPanel();
-    }catch(e){console.error(e);alert('Error al enviar el email.');}
-  };
-
-  window.openModal=function(){
-    if(window._currentTandaIdx===-1){alert('Lo sentimos, las entradas están agotadas.');return;}
-    document.getElementById('modalOverlay').classList.add('open');
-    document.body.style.overflow='hidden';
-    updateModalLabel();updatePriceDisplay();
-  };
-  window.closeModal=function(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';};
-  window.closeModalOutside=function(e){if(e.target===document.getElementById('modalOverlay'))closeModal();};
-  window.scrollToTickets=function(){document.getElementById('tickets').scrollIntoView({behavior:'smooth'});};
-  window.shareEvent=function(){
-    const data={title:'La Jodita OK Vol. 2',text:'🎟 La Jodita OK Vol. 2 — Viernes 6 de Noviembre · Club Nacional, Colonia del Sacramento',url:window.location.href};
-    if(navigator.share)navigator.share(data);
-    else navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Link copiado!'));
-  };
-
   // PARTICLES
   const canvas=document.getElementById('particles');
   const ctx=canvas.getContext('2d');
   function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
-  const pts=Array.from({length:90},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.1+.2,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,alpha:Math.random()*.35+.05,color:Math.random()>.6?'#00BFFF':Math.random()>.5?'#FFD700':'#ffffff'}));
+  const pts=Array.from({length:80},()=>({
+    x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+    r:Math.random()*1.1+.2,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,
+    alpha:Math.random()*.3+.05,
+    color:Math.random()>.5?'#cc0000':'#ffffff'
+  }));
   function animParts(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color;ctx.globalAlpha=p.alpha;ctx.fill();});
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;
+      if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color;ctx.globalAlpha=p.alpha;ctx.fill();
+    });
     ctx.globalAlpha=1;requestAnimationFrame(animParts);
   }
   animParts();
 
+  // REVEAL
   const revs=document.querySelectorAll('.reveal');
-  new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1}).observe
-  ?(()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});revs.forEach(r=>io.observe(r));})()
-  :revs.forEach(r=>r.classList.add('visible'));
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.1});
+  revs.forEach(r=>io.observe(r));
 
+  // TAGS
   document.querySelectorAll('.tag').forEach((t,i)=>t.style.setProperty('--dd',(i*.12)+'s'));
 
-  setTimeout(()=>{const s=document.getElementById('splash');s.classList.add('hide');setTimeout(()=>s.style.display='none',700);},2600);
+  // SPLASH
+  setTimeout(()=>{
+    const s=document.getElementById('splash');
+    s.classList.add('hide');
+    setTimeout(()=>s.style.display='none',700);
+  },2600);
 
-  refreshUI();
+  // SHARE
+  window.shareEvent=function(){
+    const data={title:'Noche de Confesiones — Jodita OK',text:'🎟 Noche de Confesiones · Viernes 6 de Noviembre · Club Nacional, Colonia del Sacramento',url:window.location.href};
+    if(navigator.share)navigator.share(data);
+    else navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Link copiado!'));
+  };
+
+  window.scrollToTickets=function(){document.getElementById('tickets').scrollIntoView({behavior:'smooth'});};
 </script>
 </body>
 </html>
